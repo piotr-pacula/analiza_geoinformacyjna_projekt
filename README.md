@@ -1,8 +1,12 @@
 # analiza_geoinformacyjna_projekt
 Podział pracy:
+
 2020 - Maciej.Wo
+
 2010 - Piotr
+
 2000 - Maciej.Wi
+
 1990 - Adrian
 
 
