@@ -1,4 +1,4 @@
-# races = read.csv("dane\\przyklad_b.csv")
+# races = read.csv("dane\\przyklad\\przyklad_b.csv")
 
 hindex <- function(races) {
   #races_all to liczba osob w calym obszarze w podziale na grupy rasowo-etniczne

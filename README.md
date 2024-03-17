@@ -21,3 +21,5 @@ entropia_zestandaryzowana.R -liczenie entropii zestandaryzowanej
 wskaznik_h.R - liczenie wskaznika teorii informacji H
 
 wskaznik_niepodobienstwa_d.R - liczenie wskaznika niepodobienstwa D
+
+blocks_vs_censustract.R - liczenie wkaznikow zroznicowania i segregacji na podstawie blokow i censustract w celu ich porowniania (patrz plik blct_compar_2010.csv)

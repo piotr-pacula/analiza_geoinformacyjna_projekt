@@ -1,4 +1,4 @@
-przyklad = read.csv("dane\\przyklad_b.csv")
+przyklad = read.csv("dane\\przyklad\\przyklad_b.csv")
 
 # Ilosc grupy etnicznej wg jednostki
 race1 = przyklad[,'W']

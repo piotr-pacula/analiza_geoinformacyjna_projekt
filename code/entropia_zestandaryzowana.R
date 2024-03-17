@@ -1,4 +1,4 @@
-przyklad = read.csv("dane\\przyklad_b.csv")
+przyklad = read.csv("dane\\przyklad\\przyklad_b.csv")
 
 # wyliczenie calkowitej populacji dla kazdej grupy etnicznej
 total = apply(select(przyklad, -1), 1, sum)
