@@ -1,16 +1,31 @@
 ## Wczytanie pakietow
 library(kableExtra)
 library(dplyr)
+library(sf)
+library(pals)
+library(ggplot2)
 
 ## Wczytanie danych
 wayne_aggr =  read.csv('dane\\wayne_aggr_2010.csv')
 wayne = read.csv('dane\\wayne_2010.csv')
 list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+bnd <- st_read("dane\\wayne.gpkg", layer = "wayne_2010")
 
 ## Wczytanie funkcji
 entropy = function(pi){
   entropy = -sum(pi*log(pi), na.rm = TRUE)
   return(entropy)}
+
+bivcol = function(pal){
+  tit = substitute(pal)
+  pal = pal()
+  ncol = length(pal)
+  image(matrix(seq_along(pal), nrow = sqrt(ncol)),
+        axes = FALSE, 
+        col = pal, 
+        asp = 1)
+  mtext(tit)
+}
 
 
 #utworzenie ramki danych zawierajacej identyfikator obszaru spisowego (GISJOINT) oraz ogólną liczbę ludności dla każdego obszaru spisowego. 
@@ -48,13 +63,32 @@ out <- merge(wayne_aggr, out_ct[,-2], by="GISJOIN_T")
 
 biv <-  expand.grid(ent = c("L", "M", "H"), h=c("L", "M", "H"))
 biv$biv_cls <- paste(biv$ent,biv$h,  sep="")
-biv
 
 out$Estd_cls <- cut(out$Estd, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
 out$H_cls <- cut(out$H, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
 out$biv_cls <- paste(out$Estd_cls, out$H_cls, sep="")
 
+## Zapisanie wyniku
 
-## Zapisanie wyniku, nadpisanie pliku wayne_aggr_2010.csv
+# write.csv(out,"dane\\wayne_aggr_idx_2010.csv")
 
-# write.csv(out,"dane\\wayne_aggr_2010.csv")
+## Polaczenie wyliczonych danych z danymi przestrzennymi
+
+bnd_attr <- merge(select(bnd,-any_of(c(list_race,'tot'))), out, by.x = "GISJOIN", by.y = "GISJOIN_T")
+
+## Wizualizacja wkaznikow na mapach
+
+# plot(bnd_attr["H"])
+# 
+# #legenda 
+# biv_colors = stevens.bluered()
+# names(biv_colors) = c("LL", "ML", "HL", "LM", "MM", "HM", "LH", "MH", "HH")
+# 
+# ggplot(bnd_attr) + 
+#   geom_sf(aes(fill = biv_cls)) + 
+#   scale_fill_manual(values = biv_colors) + 
+#   theme_bw()
+
+## Zapisanie do geopackage
+
+# st_write(bnd_attr, "dane\\wayne.gpkg",layer = "wayne_idx_2010", quiet=TRUE)
