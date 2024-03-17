@@ -1,23 +1,30 @@
-przyklad = read.csv("dane\\przyklad_b.csv")
+# races = read.csv("dane\\przyklad_b.csv")
 
-entropy = function(pi){
-  entropy = -sum(pi*log(pi), na.rm = TRUE)
-  return(entropy)}
-
-# liczba ludnosci dla jednostek
-zonepop = apply(select(przyklad, -1),1,sum)
-
-# Entropia calkowita
-total = apply(select(przyklad, -1),2,sum)
-pi = total/sum(total)
-allentropy = entropy(pi)
-
-# entropia dla jednostek
-pi2 = select(przyklad, -1)/zonepop
-zoneentropy = apply(pi2, 2, entropy)
-
-hindex = function(zonepop, allentropy, zoneentropy){
-  h = sum((zonepop*(allentropy-zoneentropy))/(allentropy*sum(zonepop)),na.rm = TRUE)
-  return(h)}
+hindex <- function(races) {
+  #races_all to liczba osob w calym obszarze w podziale na grupy rasowo-etniczne
+  races_all = apply(races, 2, sum, na.rm=TRUE)
+  
+  #liczba osob w calym obszarze
+  pop = sum(races_all, na.rm=TRUE)
+  
+  #liczba osob w kazdej jednostce spisowej
+  pop_i = apply(races, 1, sum, na.rm=TRUE)
+  
+  #odsetek osob w danej grupy rasowo-etnicznej w kazdej jednostce spisowej
+  proportions = races/pop_i
+  
+  #odsetek osob w danej grupy rasowo-etnicznej w calym obszarze
+  proportions_all = races_all/sum(races_all, na.rm = TRUE)
+  
+  #entropia dla kazdej jednostki spisowej
+  ent_i = apply(proportions, 1, entropy_fnc)
+  
+  #entropia dla calego obszaru
+  ent = entropy_fnc(proportions_all) 
+  
+  #obliczenie H
+  hind = sum(pop_i*(ent-ent_i)/(ent*pop), na.rm=TRUE)
+  return(hind)
+}
 
 
