@@ -24,4 +24,4 @@ wskaznik_niepodobienstwa_d.R - liczenie wskaznika niepodobienstwa D
 
 blocks_vs_censustract.R - liczenie wkaznikow zroznicowania i segregacji DLA CALEGO HRABSTWA WAYNE na podstawie blokow i censustract w celu ich porowniania (patrz plik blct_compar_2010.csv)
 
-blinx_each_ct.R - liczy wskazniki zroznicowania OSOBNO DLA KAZDEGO CENSUS TRACT na podstawie blokow, nastepnie je klasyfikuje (patrz wayne_aggr_2010.csv, ostatnie kolumny)
+blinx_each_ct.R - liczy wskazniki zroznicowania OSOBNO DLA KAZDEGO CENSUS TRACT na podstawie blokow, nastepnie je klasyfikuje
