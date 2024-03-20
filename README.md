@@ -10,9 +10,13 @@ Podział pracy:
 1990 - Adrian
 
 1990-2000 ---> Adrian
+
 2000-2010 ---> Maciej.Wi
+
 2010-2020 ---> Piotr
+
 1990-2020 ---> Maciej.Wo
+
 
 code:
 
