@@ -6,10 +6,12 @@ library(pals)
 library(ggplot2)
 
 ## Wczytanie danych
-wayne_aggr =  read.csv('dane\\wayne_aggr_2010.csv')
-wayne = read.csv('dane\\wayne_2010.csv')
+wayne_aggr =  read.csv('dane\\wayne_aggr_1990.csv')
+wayne = read.csv('dane\\wayne_1990.csv')
 list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
-bnd <- st_read("dane\\wayne.gpkg", layer = "wayne_2010")
+bnd <- st_read("dane\\wayne.gpkg", layer = "wayne_1990")
+
+wayne$tot = wayne$whites + wayne$blacks + wayne$asians + wayne$native_americans + wayne$others + wayne$latino
 
 ## Wczytanie funkcji
 entropy = function(pi){
@@ -70,7 +72,7 @@ out$biv_cls <- paste(out$Estd_cls, out$H_cls, sep="")
 
 ## Zapisanie wyniku
 
-# write.csv(out,"dane\\wayne_aggr_idx_2010.csv")
+write.csv(out,"dane\\wayne_aggr_idx_1990.csv")
 
 ## Polaczenie wyliczonych danych z danymi przestrzennymi
 
@@ -91,4 +93,4 @@ bnd_attr <- merge(select(bnd,-any_of(c(list_race,'tot'))), out, by.x = "GISJOIN"
 
 ## Zapisanie do geopackage
 
-# st_write(bnd_attr, "dane\\wayne.gpkg",layer = "wayne_idx_2010", quiet=TRUE)
+st_write(bnd_attr, "dane\\wayne.gpkg",layer = "wayne_idx_1990", quiet=TRUE)
