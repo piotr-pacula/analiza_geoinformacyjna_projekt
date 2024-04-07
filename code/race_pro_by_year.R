@@ -36,4 +36,6 @@ wayne_racepro = data.frame(race = list_race,
                                          others = sum(wayne_aggr_2020$others)/allpop_2020*100,
                                          latino = sum(wayne_aggr_2020$latino)/allpop_2020*100))
 
+# write.csv(wayne_racepro, 'dane\\race_pro_year.csv')
+
 
