@@ -37,3 +37,13 @@ blinx_each_ct.R - liczy wskazniki zroznicowania OSOBNO DLA KAZDEGO CENSUS TRACT 
 std_borders_and_class.R - sprowadza granice z lat 1990, 2000 i 2010 do tych z 2020. Dodaje kolumne z klasyfikacja obszaru wg dominujacej grupy rasowej
 
 date_comparison.R - Laczy dane z dwoch roznych lat i tworzy dla nich wykresy porownawcze
+
+
+Pliki do raportu
+
+Liczba ludności w hrabstwie X w latach 1990, 2000, 2010, 2020 (tabela)
+
+Procentowy udział poszczególnych grup rasowo-etnicznych w hrabstwie X w latach 1990,2000, 2010, 2020 (tabela)
+
+Porównanie miar segregacji rasowej oraz zróżnicowania rasowego obliczonych na podstawie bloków spisowych oraz obszarów spisowych (E, Estd, H, D) dla lat 1990, 2000, 2010, 2020 (tabela). blct_compar_1990.csv, blct_compar_2000.csv, blct_compar_2010.csv, blct_compar_2020.csv
+
