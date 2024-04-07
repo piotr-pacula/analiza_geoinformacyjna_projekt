@@ -39,6 +39,7 @@ std_borders_and_class.R - sprowadza granice z lat 1990, 2000 i 2010 do tych z 20
 date_comparison.R - Laczy dane z dwoch roznych lat i tworzy dla nich wykresy porownawcze
 
 
+
 Pliki do raportu
 
 Liczba ludności w hrabstwie X w latach 1990, 2000, 2010, 2020 (tabela)
