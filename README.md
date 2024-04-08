@@ -40,3 +40,6 @@ date_comparison.R - Laczy dane z dwoch roznych lat i tworzy dla nich wykresy por
 
 
 race_pro_by_year.R - tworzy tabele z procentami populacji kazdej rasy w badanych latach
+
+
+trans_matrix.R - tworzy macierz przejsc
