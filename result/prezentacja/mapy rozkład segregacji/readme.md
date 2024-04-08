@@ -1,0 +1,1 @@
+Mapy rozkładu segregacji
