@@ -43,3 +43,12 @@ race_pro_by_year.R - tworzy tabele z procentami populacji kazdej rasy w badanych
 
 
 trans_matrix.R - tworzy macierz przejsc
+
+
+estd_map.R - tworzy wykres mapy klasyfikacji entropi zestandaryzowanej
+
+
+estd_map2.R - tworzy wykres mapy entropi zestandaryzowanej
+
+
+hindex_map.R - tworzy wykres mapy indeksu H
