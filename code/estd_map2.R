@@ -10,7 +10,7 @@ wayne_idx_2020 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_2020')
 
 p1 <- ggplot(data = wayne_idx_1990) +
   geom_sf(aes(fill = Estd)) +
-  scale_fill_gradient(name = "Entropia Zestandaryzowana", low = "white", high = "red", limits = c(0, 1)) +  # Set legend title
+  scale_fill_gradient2(name = "Entropia Zestandaryzowana", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Set legend title
   labs(title = "1990") + 
   theme_bw() + theme(
     axis.text = element_blank(),
@@ -20,7 +20,7 @@ p1 <- ggplot(data = wayne_idx_1990) +
 
 p2 <- ggplot(data = wayne_idx_2000) +
   geom_sf(aes(fill = Estd)) +
-  scale_fill_gradient(name = "Entropia Zestandaryzowana", low = "white", high = "red", limits = c(0, 1)) +  # Consistent legend title
+  scale_fill_gradient2(name = "Entropia Zestandaryzowana", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
   labs(title = "2000") + 
   theme_bw() + theme(
     axis.text = element_blank(),
@@ -30,7 +30,7 @@ p2 <- ggplot(data = wayne_idx_2000) +
 
 p3 <- ggplot(data = wayne_idx_2010) +
   geom_sf(aes(fill = Estd)) +
-  scale_fill_gradient(name = "Entropia Zestandaryzowana", low = "white", high = "red", limits = c(0, 1)) +  # Consistent legend title
+  scale_fill_gradient2(name = "Entropia Zestandaryzowana", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
   labs(title = "2010") + 
   theme_bw() + theme(
     axis.text = element_blank(),
@@ -40,7 +40,7 @@ p3 <- ggplot(data = wayne_idx_2010) +
 
 p4 <- ggplot(data = wayne_idx_2020) +
   geom_sf(aes(fill = Estd)) +
-  scale_fill_gradient(name = "Entropia Zestandaryzowana", low = "white", high = "red", limits = c(0, 1)) +  # Consistent legend title
+  scale_fill_gradient2(name = "Entropia Zestandaryzowana", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
   labs(title = "2020") + 
   theme_bw() + theme(
     axis.text = element_blank(),
