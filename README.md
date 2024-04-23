@@ -1,6 +1,16 @@
 # analiza_geoinformacyjna_projekt
 Podział pracy:
 
+Podstawowe informacje na temat rasowo-etnicznej struktury ludności - Maciej.Wi
+
+Analiza zmian typów struktury rasowo-etnicznej ludności (klasyfikacja na 9 typów na podstawie procentowego udziału danej grupy rasowo-etnicznej) - Maciej.Wo
+
+Przestrzenny rozkład segregacji oraz zróżnicowania rasowego w hrabstwie w latach 1990-2020 - Piotr
+
+Wykorzystanie metod analizy krajobrazowej w analizie rasowo-etnicznej struktury ludnści + elementy dodatkowe - Adrian
+
+https://dmowska-dydaktyka.web.amu.edu.pl/data/uploads/analiza_geoinformacyjna/raport_koncowy.html
+
 2020 - Maciej.Wo
 
 2010 - Piotr
