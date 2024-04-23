@@ -1,6 +1,6 @@
 ---
 title: "Raport"
-author: "Piotr"
+author: "Piotr AMOGUS"
 date: "2024-04-23"
 output: html_document
 ---
