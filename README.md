@@ -62,3 +62,5 @@ estd_map2.R - tworzy wykres mapy entropi zestandaryzowanej
 
 
 hindex_map.R - tworzy wykres mapy indeksu H
+
+hestd_map.R - tworzy wykres mapy typu struktury rasowo etnicznej na podstawie klasy entropi zestandaryzowanej i wskaznika H

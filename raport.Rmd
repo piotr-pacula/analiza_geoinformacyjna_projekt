@@ -1,32 +1,290 @@
 ---
-title: "Raport"
-author: "Piotr AMOGUS"
+title: "Analiza zmian rasowo-etnicznej struktury ludności w hrabstwie Wayne w latach 1990-2020"
+author: "Adrian Kurs, Maciej Wiśniewski, Maciej Wołosz, Piotr Pacuła"
 date: "2024-04-23"
 output:
-  pdf_document: default
-  html_document: default
+  html_document:
+    code_folding: hide
+encoding: 'utf-8'
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(sf)
+library(ggplot2)
+library(patchwork)
+library(pals)
+
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+wayne_idx_1990 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_1990')
+wayne_idx_2000 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_2000')
+wayne_idx_2010 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_2010')
+wayne_idx_2020 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_2020')
 ```
 
-## R Markdown
+# Przestrzenny rozkład segregacji oraz zróżnicowania rasowego w hrabstwie w latach 1990-2020
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
+p1 <- ggplot(data = wayne_idx_1990) +
+  geom_sf(aes(fill = H)) +
+  scale_fill_gradient2(name = "Wskaźnik H", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Set legend title
+  labs(title = "1990") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-jkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbsjkgvfilkughiufhsdhfsdjkgfhnsdfjhfbhsdijfhsdjhfbsdjhfbsduhfbvsdjkhfcbsduhvbsdijhvfbhsdkjcbsdhjcvbsdjhvbsdjhvbs
-```{r cars}
+p2 <- ggplot(data = wayne_idx_2000) +
+  geom_sf(aes(fill = H)) +
+  scale_fill_gradient2(name = "Wskaźnik H", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
+  labs(title = "2000") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
 
+p3 <- ggplot(data = wayne_idx_2010) +
+  geom_sf(aes(fill = H)) +
+  scale_fill_gradient2(name = "Wskaźnik H", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
+  labs(title = "2010") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+p4 <- ggplot(data = wayne_idx_2020) +
+  geom_sf(aes(fill = H)) +
+  scale_fill_gradient2(name = "Wskaźnik H", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
+  labs(title = "2020") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+combined <- p1 + p2 + p3 + p4 + plot_layout(guides = "collect") & theme(legend.position = "right")
+
+combined = combined + plot_annotation("Rozklad wartosci wskaznika H na poziomie obszarow spisowych")
+
+cls_color <- c("L"= "#008000", "M"= "#FFFF00", "H"= "#FF0000")
+
+colpal <- cls_color[names(cls_color)%in%unique(wayne_idx_1990$H_cls)]
+
+wayne_idx_1990$H_cls <- factor(wayne_idx_1990$H_cls, levels = c("H", "M", "L"))
+wayne_idx_2000$H_cls <- factor(wayne_idx_2000$H_cls, levels = c("H", "M", "L"))
+wayne_idx_2010$H_cls <- factor(wayne_idx_2010$H_cls, levels = c("H", "M", "L"))
+wayne_idx_2020$H_cls <- factor(wayne_idx_2020$H_cls, levels = c("H", "M", "L"))
+
+p12 <- ggplot(data = wayne_idx_1990) +
+  geom_sf(aes(fill = H_cls)) +
+  scale_fill_manual(values = colpal) + 
+  labs(title = "1990", fill = "Wskaźnik H") + 
+  theme_bw() + theme(
+  axis.text = element_blank(),
+  axis.ticks = element_blank(),
+  panel.grid = element_blank())
+
+p22 <- ggplot(data = wayne_idx_2000) +
+  geom_sf(aes(fill = H_cls)) +
+  scale_fill_manual(values = colpal) + 
+  labs(title = "2000", fill = "Wskaźnik H") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  ) +
+  guides(fill = 'none')
+
+p32 <- ggplot(data = wayne_idx_2010) +
+  geom_sf(aes(fill = H_cls)) +
+  scale_fill_manual(values = colpal) + 
+  labs(title = "2010", fill = "Wskaźnik H") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+p42 <- ggplot(data = wayne_idx_2020) +
+  geom_sf(aes(fill = H_cls)) +
+  scale_fill_manual(values = colpal) + 
+  labs(title = "2020", fill = "Wskaźnik H") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  ) + 
+  guides(fill = 'none')
+
+combined2 <- p12 + p22 + p32 + p42 + plot_layout(guides = "collect") & theme(legend.position = "right")
+
+combined2 = combined2 + plot_annotation("Klasyfikacja wkaźnika H na poziomie obszarow spisowych")
+
+print(combined)
+print(combined2)
 ```
 
-## Including Plots
+<font size="4">Badając przestrzenny rozkład wartości wskaźnika H można zaobserwować różnice pomiędzy częściami Hrabstwa Wayne. W 2020 roku obszarem o największym poziomem segregacji rasowej były głównie obszary spisowe znajdujące się w centrum miasta, w szczególności te w północnej części. Porównując wizualizacje dla poszczególnych lat można również zaobserwować stopniowe zmiany na obszarze w skali czasowej gdzie wyróżnia się rzadziej zaludniona południowa oraz północno-zachodnia część badanego obszaru. Widać tam znaczny spadek poziomu segregacji rasowej na przestrzeni okresu od 1990 do 2020. Pewną tendencją spadkową wykazało się również same centrum miasta gdzie w latach 1990 i 2010 występowały obszary o maksymalnej wartości wskaźnika teorii informacji H. Najmniejszą zmiennością wykazały się obszary położone na północ od centrum miasta gdzie poziom segregacji rasowej utrzymywał się na podobnym poziomie na przestrzeni badanego okresu. Ogólnie na podstawie map rozkładu wartości wskaźnika H można stwierdzieć, że poziom segregacji rasowej na terenie Hrabstwa Wayne w latach 1990-2020 stopniowo spadał.
 
-You can also embed plots, for example:
+```{r}
+p1 <- ggplot(data = wayne_idx_1990) +
+  geom_sf(aes(fill = Estd)) +
+  scale_fill_gradient2(name = "Entropia Zestandaryzowana", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Set legend title
+  labs(title = "1990") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+p2 <- ggplot(data = wayne_idx_2000) +
+  geom_sf(aes(fill = Estd)) +
+  scale_fill_gradient2(name = "Entropia Zestandaryzowana", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
+  labs(title = "2000") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+p3 <- ggplot(data = wayne_idx_2010) +
+  geom_sf(aes(fill = Estd)) +
+  scale_fill_gradient2(name = "Entropia Zestandaryzowana", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
+  labs(title = "2010") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+p4 <- ggplot(data = wayne_idx_2020) +
+  geom_sf(aes(fill = Estd)) +
+  scale_fill_gradient2(name = "Entropia Zestandaryzowana", low = "darkgreen",mid = "yellow", high = "red",midpoint = 0.5 ,limits = c(0, 1)) +  # Consistent legend title
+  labs(title = "2020") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+combined <- p1 + p2 + p3 + p4 + plot_layout(guides = "collect") & theme(legend.position = "right")
+
+combined = combined + plot_annotation("Rozklad wartosci entropi zestandarysowanej na poziomie obszarow spisowych")
+
+cls_color <- c("L"= "#008000", "M"= "#FFFF00", "H"= "#FF0000")
+
+colpal <- cls_color[names(cls_color)%in%unique(wayne_idx_1990$Estd_cls)]
+
+wayne_idx_1990$Estd_cls <- factor(wayne_idx_1990$Estd_cls, levels = c("H", "M", "L"))
+wayne_idx_2000$Estd_cls <- factor(wayne_idx_2000$Estd_cls, levels = c("H", "M", "L"))
+wayne_idx_2010$Estd_cls <- factor(wayne_idx_2010$Estd_cls, levels = c("H", "M", "L"))
+wayne_idx_2020$Estd_cls <- factor(wayne_idx_2020$Estd_cls, levels = c("H", "M", "L"))
+
+p12 <- ggplot(data = wayne_idx_1990) +
+  geom_sf(aes(fill = Estd_cls)) +
+  scale_fill_manual(values = colpal) + 
+  labs(title = "1990", fill = "Entropia zestandaryzowana") + 
+  theme_bw() + theme(
+  axis.text = element_blank(),
+  axis.ticks = element_blank(),
+  panel.grid = element_blank())
+
+p22 <- ggplot(data = wayne_idx_2000) +
+  geom_sf(aes(fill = Estd_cls)) +
+  scale_fill_manual(values = colpal) + 
+  labs(title = "2000", fill = "Entropia zestandaryzowana") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+p32 <- ggplot(data = wayne_idx_2010) +
+  geom_sf(aes(fill = Estd_cls)) +
+  scale_fill_manual(values = colpal) + 
+  labs(title = "2010", fill = "Entropia zestandaryzowana") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+p42 <- ggplot(data = wayne_idx_2020) +
+  geom_sf(aes(fill = Estd_cls)) +
+  scale_fill_manual(values = colpal) + 
+  labs(title = "2020", fill = "Entropia zestandaryzowana") + 
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+combined2 <- p12 + p22 + p32 + p42 + plot_layout(guides = "collect") & theme(legend.position = "right")
+
+combined2 = combined2 + plot_annotation("Klasyfikacja entropi zestandarysowanej na poziomie obszarow spisowych")
+
+# Print the combined plot
+print(combined)
+print(combined2)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+<font size="4">Na podstawie przestrzennej reprezentacji poziomu entropi zestandarysowanej dla poszczególnych obszarów spisowych Hrabstwa Wayne można zauważyć drastyczne zmiany w poziomie zróżnicowania rasowego regionu. Podczas gdy w roku 1990 niemal jedynym obszarem o dużej różnorodności rasowej było centrum miasta, z każdą następną dekadą widać jak poziom zróżnicowania rasowego na obrzeżach miasta stopniowo rośnie. Podczas gdy w samym centrum różnorodniość etniczna również wzrosła, niezwykle gwałtowną tendencją wzrostową wykazały się rzadziej zaludnione południowe obszary spisowe Hrabstwa Wayne gdzie w 1990 roku przeważały obszary o niskim poziomie zróżnicowania rasowego natomiast w roku 2020 obszary te dorównują w swojej wieloetniczności poziomom obserwowanym w centrum. Najmniejszą zmiennością podobnie jak w przypadku wskaźnika H wykazały się tereny na północ od głównego skupiska miejskiego.
+
+```{r}
+unique_cls = unique(c(unique(wayne_idx_1990$biv_cls),unique(wayne_idx_2000$biv_cls),unique(wayne_idx_2010$biv_cls),unique(wayne_idx_2020$biv_cls)))
+
+biv_colors = stevens.bluered()
+names(biv_colors) = c("LL", "ML", "HL", "LM", "MM", "HM", "LH", "MH", "HH")
+biv_colors = biv_colors[names(biv_colors) %in% unique_cls]
+
+p1 <- ggplot(data = wayne_idx_1990) +
+  geom_sf(aes(fill = biv_cls)) +
+  scale_fill_manual(values = biv_colors, drop = FALSE, limits = names(biv_colors)) +
+  labs(title = "1990", fill = "Struktura rasowo-etniczna") +
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank())
+
+
+p2 <- ggplot(data = wayne_idx_2000) +
+  geom_sf(aes(fill = biv_cls)) +
+  scale_fill_manual(values = biv_colors, drop = FALSE, limits = names(biv_colors)) +
+  labs(title = "2000", fill = "Struktura rasowo-etniczna") +
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+p3 <- ggplot(data = wayne_idx_2010) +
+  geom_sf(aes(fill = biv_cls)) +
+  scale_fill_manual(values = biv_colors,drop = FALSE, limits = names(biv_colors)) +
+  labs(title = "2010", fill = "Struktura rasowo-etniczna") +
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+p4 <- ggplot(data = wayne_idx_2020) +
+  geom_sf(aes(fill = biv_cls)) +
+  scale_fill_manual(values = biv_colors, drop = FALSE, limits = names(biv_colors)) +
+  labs(title = "2020", fill = "Struktura rasowo-etniczna") +
+  theme_bw() + theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+combined <- p1 + p2 + p3 + p4 + plot_layout(guides = "collect") & theme(legend.position = "right")
+
+combined = combined + plot_annotation("Typy struktur rasowo-etnicznych")
+
+print(combined)
+```
+
