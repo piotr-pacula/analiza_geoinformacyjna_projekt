@@ -341,6 +341,7 @@ library(fasterize)
 library(tidyverse)
 library(kableExtra)
 
+
 wayne_stb_1990 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_1990')
 wayne_stb_2000 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_2000')
 wayne_stb_2010 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_2010')
@@ -372,7 +373,7 @@ cls_code90 = data.frame(cls90 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM"
 results90 = merge(cls_code90, lm_df90, by = "class", all.x = TRUE)
 
 
-# write.csv(results90, "cwiczenie 5/landscape_metrics_1990.csv", row.names = FALSE)
+# write.csv(results90, "dane/landscape_metrics_1990.csv", row.names = FALSE)
 
 
 np90 = lsm_l_np(cls90)
@@ -411,7 +412,7 @@ cls_code00 = data.frame(cls00 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM"
 results00 = merge(cls_code00, lm_df00, by = "class", all.x = TRUE)
 
 
-# write.csv(results00, "cwiczenie 5/landscape_metrics_2000.csv", row.names = FALSE)
+# write.csv(results00, "dane/landscape_metrics_2000.csv", row.names = FALSE)
 
 
 np00 = lsm_l_np(cls00)
@@ -449,7 +450,7 @@ cls_code10 = data.frame(cls10 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM"
 results10 = merge(cls_code10, lm_df10, by = "class", all.x = TRUE)
 
 
-# write.csv(results10, "cwiczenie 5/landscape_metrics_2010.csv", row.names = FALSE)
+# write.csv(results10, "dane/landscape_metrics_2010.csv", row.names = FALSE)
 
 
 np10 = lsm_l_np(cls10)
@@ -487,7 +488,7 @@ cls_code20 = data.frame(cls20 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM"
 results20 = merge(cls_code20, lm_df20, by = "class", all.x = TRUE)
 
 
-# write.csv(results20, "cwiczenie 5/landscape_metrics_2020.csv", row.names = FALSE)
+# write.csv(results20, "dane/landscape_metrics_2020.csv", row.names = FALSE)
 
 
 np20 = lsm_l_np(cls20)
@@ -501,6 +502,6 @@ plot(cls20, col = cls_color, main = "2020")
 results20 %>%
   kbl() %>%
   kable_classic_2(full_width = F) %>%
-  column_spec(1, background = cls_color)
+  column_spec(1, background = "cls_color")
 ```
 

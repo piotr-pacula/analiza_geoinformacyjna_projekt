@@ -2183,7 +2183,7 @@ cls_code90 = data.frame(cls90 = c(&quot;WL&quot;, &quot;WM&quot;, &quot;BL&quot;
 results90 = merge(cls_code90, lm_df90, by = &quot;class&quot;, all.x = TRUE)
 
 
-# write.csv(results90, &quot;cwiczenie 5/landscape_metrics_1990.csv&quot;, row.names = FALSE)
+# write.csv(results90, &quot;dane/landscape_metrics_1990.csv&quot;, row.names = FALSE)
 
 
 np90 = lsm_l_np(cls90)
@@ -2425,7 +2425,7 @@ cls_code00 = data.frame(cls00 = c(&quot;WL&quot;, &quot;WM&quot;, &quot;BL&quot;
 results00 = merge(cls_code00, lm_df00, by = &quot;class&quot;, all.x = TRUE)
 
 
-# write.csv(results00, &quot;cwiczenie 5/landscape_metrics_2000.csv&quot;, row.names = FALSE)
+# write.csv(results00, &quot;dane/landscape_metrics_2000.csv&quot;, row.names = FALSE)
 
 
 np00 = lsm_l_np(cls00)
@@ -2666,7 +2666,7 @@ cls_code10 = data.frame(cls10 = c(&quot;WL&quot;, &quot;WM&quot;, &quot;BL&quot;
 results10 = merge(cls_code10, lm_df10, by = &quot;class&quot;, all.x = TRUE)
 
 
-# write.csv(results10, &quot;cwiczenie 5/landscape_metrics_2010.csv&quot;, row.names = FALSE)
+# write.csv(results10, &quot;dane/landscape_metrics_2010.csv&quot;, row.names = FALSE)
 
 
 np10 = lsm_l_np(cls10)
@@ -2907,7 +2907,7 @@ cls_code20 = data.frame(cls20 = c(&quot;WL&quot;, &quot;WM&quot;, &quot;BL&quot;
 results20 = merge(cls_code20, lm_df20, by = &quot;class&quot;, all.x = TRUE)
 
 
-# write.csv(results20, &quot;cwiczenie 5/landscape_metrics_2020.csv&quot;, row.names = FALSE)
+# write.csv(results20, &quot;dane/landscape_metrics_2020.csv&quot;, row.names = FALSE)
 
 
 np20 = lsm_l_np(cls20)
@@ -2921,7 +2921,7 @@ plot(cls20, col = cls_color, main = &quot;2020&quot;)</code></pre>
 <pre class="r"><code>results20 %&gt;%
   kbl() %&gt;%
   kable_classic_2(full_width = F) %&gt;%
-  column_spec(1, background = cls_color)</code></pre>
+  column_spec(1, background = &quot;cls_color&quot;)</code></pre>
 <table class=" lightable-classic-2" style="font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -2947,7 +2947,7 @@ pland
 </thead>
 <tbody>
 <tr>
-<td style="text-align:right;background-color: rgba(255, 140, 0, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 1
 </td>
 <td style="text-align:left;">
@@ -2967,7 +2967,7 @@ WL
 </td>
 </tr>
 <tr>
-<td style="text-align:right;background-color: rgba(255, 215, 0, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 2
 </td>
 <td style="text-align:left;">
@@ -2987,7 +2987,7 @@ WM
 </td>
 </tr>
 <tr>
-<td style="text-align:right;background-color: rgba(0, 100, 0, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 3
 </td>
 <td style="text-align:left;">
@@ -3007,7 +3007,7 @@ BL
 </td>
 </tr>
 <tr>
-<td style="text-align:right;background-color: rgba(50, 205, 50, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 4
 </td>
 <td style="text-align:left;">
@@ -3027,7 +3027,7 @@ BM
 </td>
 </tr>
 <tr>
-<td style="text-align:right;background-color: rgba(205, 85, 85, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 5
 </td>
 <td style="text-align:left;">
@@ -3047,7 +3047,7 @@ NA
 </td>
 </tr>
 <tr>
-<td style="text-align:right;background-color: rgba(255, 106, 106, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 6
 </td>
 <td style="text-align:left;">
@@ -3067,7 +3067,7 @@ AM
 </td>
 </tr>
 <tr>
-<td style="text-align:right;background-color: rgba(93, 71, 139, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 7
 </td>
 <td style="text-align:left;">
@@ -3087,7 +3087,7 @@ HL
 </td>
 </tr>
 <tr>
-<td style="text-align:right;background-color: rgba(147, 112, 219, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 8
 </td>
 <td style="text-align:left;">
@@ -3107,7 +3107,7 @@ HM
 </td>
 </tr>
 <tr>
-<td style="text-align:right;background-color: rgba(143, 143, 143, 255) !important;">
+<td style="text-align:right;background-color: cls_color !important;">
 9
 </td>
 <td style="text-align:left;">
