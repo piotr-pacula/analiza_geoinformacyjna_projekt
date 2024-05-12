@@ -47,9 +47,9 @@ wayne_idx_2010 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_2010')
 wayne_idx_2020 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_2020')
 ```
 
-# Przestrzenny rozkład segregacji oraz zróżnicowania rasowego w hrabstwie w latach 1990-2020
+# 2. Przestrzenny rozkład segregacji oraz zróżnicowania rasowego w hrabstwie w latach 1990-2020
 
-### Rozkład wartości wskaźnika H na poziomie obszarów spisowych dla poszczególnych lat
+### 2.1. Rozkład wartości wskaźnika H na poziomie obszarów spisowych dla poszczególnych lat
 
 ```{r}
 p1 <- ggplot(data = wayne_idx_1990) +
@@ -158,7 +158,7 @@ print(combined2)
 
 <font size="4">Badając przestrzenny rozkład wartości wskaźnika H można zaobserwować różnice pomiędzy częściami Hrabstwa Wayne. W 2020 roku obszarem o największym poziomie segregacji rasowej były głównie obszary spisowe znajdujące się w centrum miasta, w szczególności te w północnej części. Porównując wizualizacje dla poszczególnych lat można również zaobserwować stopniowe zmiany na obszarze w skali czasowej gdzie wyróżnia się rzadziej zaludniona południowa część badanego obszaru. Widać tam spadek poziomu segregacji rasowej na przestrzeni okresu od 1990 do 2020. Pewną tendencją spadkową wykazało się również same centrum miasta gdzie w latach 1990 i 2010 występowały obszary o maksymalnej wartości wskaźnika teorii informacji H. Najmniejszą zmiennością wykazały się obszary położone na północ od centrum miasta gdzie poziom segregacji rasowej utrzymywał się na podobnym poziomie na przestrzeni badanego okresu. Ogólnie na podstawie map rozkładu wartości wskaźnika H można stwierdzieć, że poziom segregacji rasowej na terenie Hrabstwa Wayne w latach 1990-2020 stopniowo spadał.
 
-### Rozkład wartości entropii standaryzowanej na poziomie obszarów spisowych dla poszczególnych lat
+### 2.2. Rozkład wartości entropii standaryzowanej na poziomie obszarów spisowych dla poszczególnych lat
 
 ```{r}
 p1 <- ggplot(data = wayne_idx_1990) +
@@ -265,9 +265,9 @@ combined2 = combined2 + plot_annotation("Klasyfikacja entropii zestandaryzowanej
 print(combined2)
 ```
 
-<font size="4">Na podstawie przestrzennej reprezentacji poziomu entropi zestandarysowanej dla poszczególnych obszarów spisowych Hrabstwa Wayne można zauważyć drastyczne zmiany w poziomie zróżnicowania rasowego regionu. Podczas gdy w roku 1990 niemal jedynym obszarem o dużej różnorodności rasowej było centrum miasta, z każdą następną dekadą widać jak poziom zróżnicowania rasowego na obrzeżach miasta stopniowo rośnie. Podczas gdy w samym centrum różnorodniość etniczna również wzrosła, niezwykle gwałtowną tendencją wzrostową wykazały się rzadziej zaludnione południowe obszary spisowe Hrabstwa Wayne, gdzie w 1990 roku przeważały obszary o niskim poziomie zróżnicowania rasowego natomiast w roku 2020 dorównują one w swojej wieloetniczności poziomom obserwowanym w centrum. Najmniejszą zmiennością podobnie jak w przypadku wskaźnika H wykazały się tereny na północ od głównego skupiska miejskiego.
+<font size="4">Na podstawie przestrzennej reprezentacji poziomu entropii zestandaryzowanej dla poszczególnych obszarów spisowych Hrabstwa Wayne można zauważyć drastyczne zmiany w poziomie zróżnicowania rasowego regionu. Podczas gdy w roku 1990 niemal jedynym obszarem o dużej różnorodności rasowej było centrum miasta, z każdą następną dekadą widać jak poziom zróżnicowania rasowego na obrzeżach miasta stopniowo rośnie. Podczas gdy w samym centrum różnorodniość etniczna również wzrosła, niezwykle gwałtowną tendencją wzrostową wykazały się rzadziej zaludnione południowe obszary spisowe Hrabstwa Wayne, gdzie w 1990 roku przeważały obszary o niskim poziomie zróżnicowania rasowego natomiast w roku 2020 dorównują one w swojej wieloetniczności poziomom obserwowanym w centrum. Najmniejszą zmiennością podobnie jak w przypadku wskaźnika H wykazały się tereny na północ od głównego skupiska miejskiego.
 
-### Typy struktur rasowo-etnicznych
+### 2.3. Typy struktur rasowo-etnicznych
 
 ```{r}
 biv_colors = stevens.bluered()
@@ -321,20 +321,102 @@ print(p4)
 
 <font size="4">Powyższy wykres przedstawia typy struktur rasowo etnicznych dla obszarów spisowych w Hrabstwie Wayne dla poszczególnych lat. Kategorie zostały stworzone poprzez kombinację klasyfikacji entropii zestandaryzowanej (pierwsza litera) i wzkaźnika H (druga litera): L - niski poziom, M - średni poziom, H - wysoki poziom. Na podstawie wizualizacji można zaobserwować, że podczas gdy w roku 1990 poza centrum miasta dominowały obszary o niskim zróżnicowaniu rasowym i niskiej segregacj (LL), w kolejnych latah coraz bardziej dominujące stały się obszary o średnim zróżnicowaniu i niskiej segregacj (ML). Zarówno w centrum jak i na obrzeżach miasta pojawiło się również znacznie więcej obszarów o wysokim zróżnicowaniu etnicznym i niskiej segregacji (HL). W żadnym z badanych lat nie wystąpiły natomiast obszary o wysokim poziomie segregacji i zróżnicowania rasowego. Zwłasza w pobliżu centrum pojawiło się dużo obszarów o średniej wartości obydwu wskaźników. Niezaskakująco, miejscem które wykazało się najmniejszą zmiennością w czasie są obszary znajdujące się na północny-zachód od śródmieścia.
 
-### Ilość obszarów spisowych dla poszczególnych typów w 1990 roku
+### 2.4. Ilość obszarów spisowych dla poszczególnych typów w 1990 roku
 
 ```{r}
 table(wayne_idx_1990$biv_cls)
 ```
 
-### Ilość obszarów spisowych dla poszczególnych typów w 2020 roku
+### 2.5. Ilość obszarów spisowych dla poszczególnych typów w 2020 roku
 
 ```{r}
 table(wayne_idx_2020$biv_cls)
 ```
 
-# Wykorzystanie metod analizy krajobrazowej w analizie rasowo-etnicznej struktury ludności
+### 2.6. Mapa zmian między rokiem 1990-2020
 
+<font size="4">Mapa ta uwidacznia zmiany typów struktury rasowo-etnicznej. Została przygotowana w oprogramowaniu QGIS.
+<br>
+<br>
+<font size="4">Strukturę rasowo-etniczną ludności klasyfikujemy odpowiednio:
+<br>
+<font size="4">1. Typ mało zróżnicowany (grupa dominująca powyżej 80%):
+<ol style="list-style-type: none;">
+  <li><font size="3">• zdominowany przez białych (WL)</li>
+  <li><font size="3">• zdominowany przez czarnych (BL)</li>
+  <li><font size="3">• zdominowany przez Azjatów (AL)</li>
+  <li><font size="3">• zdominowany przez Latynosów (HL)</li>
+</ol>
+<font size="4">2. Typ średnio zróżnicowany (grupa dominująca 50%-80%):
+<ol style="list-style-type: none;">
+  <li><font size="3">• zdominowany przez białych (WM)</li>
+  <li><font size="3">• zdominowany przez czarnych (BM)</li>
+  <li><font size="3">• zdominowany przez Azjatów (AM)</li>
+  <li><font size="3">• zdominowany przez Latynosów (HM)</li>
+</ol>
+<font size="4">3. Typ o dużym zróżnicowaniu - HD (żadna grupa nie przekracza 50%)
+<br>
+<br>
+```{r}
+knitr::include_graphics("result/raport/mapa_zmian.png")
+```
+<font size="4">Do zmian doszło praktycznie na większości obszarów spisowych (część ludności białej bez zmian w południowej i północnej części, podobnie wiele obszarów z ludnością czarną w mieście Detroit). Na pierwszy rzut oka zauważamy spadek udziału ludności białej (z dominacji >80% WL do dominacji 50%-80% WM). Za to ludność czarna na przestrzeni lat zwiększa swój udział na przedmieściach Detroit (głównie BM→BL). Również na przedmieściach pojawił się mniejszy i większy udział Latynosów tym samym zmniejszając udział ludności białej i o dużym zróżnicowaniu (HD→HM, WM→HM). Patrząc na zachód zauważamy zmniejszenie udziału ludności białej na rzecz ludności o dużym zróżnicowaniu (WL→HD).
+<br>
+
+### 2.7. Macierz przejść klasyfikacji obszarów spisowych między rokiem 1990 a 2020
+
+```{r, include=FALSE}
+wayne_1990 <- st_read("dane/wayne.gpkg", layer = "wayne_stb_1990")
+wayne_2020 <- st_read("dane/wayne.gpkg", layer = "wayne_stb_2020")
+```
+
+
+```{r}
+wayne_1990 = st_drop_geometry(wayne_1990)
+wayne_1990 = select(wayne_1990, 1,'race_cls')
+wayne_1990 = rename(wayne_1990, race_cls_1990 = race_cls) 
+
+wayne_2020 = st_drop_geometry(wayne_2020)
+wayne_2020 = select(wayne_2020, 1,'race_cls')
+wayne_2020 = rename(wayne_2020, race_cls_2020 = race_cls) 
+
+wayne_1990_2020 = merge(wayne_1990, wayne_2020, by = "GISJOIN")
+
+# table(wayne_1990_2020$race_cls_1990)
+
+# table(wayne_1990_2020$race_cls_2020)
+
+trans_matrix = table(wayne_1990_2020$race_cls_1990, wayne_1990_2020$race_cls_2020)
+
+# write.csv(trans_matrix, "dane\\transition_matrix.csv")
+
+trans_matrix
+```
+Macierz ta przedstawia przejścia klas z 1990r. do 2020r. Wiersz zawiera dane z 1990, zaś kolumny dla roku 2020. Przykładowo: wartość 20 (pierwszy wiersz, trzecia kolumna) oznacza, że 20 obszarów spisowych sklasyfikowanych w roku 1990 jako BL już w roku 2020 zmieniło swój typ na BM. Do największego przejścia doszło z WL do WM - 139 obszarów spisowych.
+<br>
+<br>
+Liczba obszarów spisowych według typów w 1990r.
+```{r}
+rowSums(trans_matrix) # dla typów w 1990
+```
+<br>
+Liczba obszarów spisowych według typów w 2020r.
+```{r}
+colSums(trans_matrix) # dla typów w 2020
+```
+Po zsumowaniu wartości w wierszach i kolumnach widzimy, że największą dominację ma ludność biała oraz czarna. Sytuacja ta nie zmienia się w 2020, lecz udział WL spadł na rzecz WM, HD, BM.
+
+# 4. Wykorzystanie metod analizy krajobrazowej w analizie rasowo-etnicznej struktury ludności
+
+### 4.1 Metryki krajobrazowe
+
+Metryki krajobrazowe dostarczają informacje na temat przestrzennego rozkładu struktury rasowo-etnicznej. W celu dokonania analizy zostały obliczone 4 metryki krajobrazowe:
+<ol style="list-style-type: none;">
+  <li><font size="2.5">• np - liczba płatów</li>
+  <li><font size="2.5">• lpi - stosunek powierzchni największego płata danego typu do powierzchni całego obszaru</li>
+  <li><font size="2.5">• PLAND - procent obszaru zajęty przez dany typ zróżnicowania</li>
+  <li><font size="2.5">• AI - poziom agregacji (0 – pełne rozproszenie, komórki tego samego typu nie graniczą ze sobą; 100 – jeden płat danego typu)</li>
+</ol>
 ```{r, include=FALSE}
 library(landscapemetrics)
 library(fasterize)
@@ -347,7 +429,7 @@ wayne_stb_2000 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_2000')
 wayne_stb_2010 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_2010')
 wayne_stb_2020 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_2020')
 ```
-
+<font size="4">
 ```{r, warning=FALSE, message=FALSE, echo = TRUE}
 wayne_stb_1990$cls90 = recode(wayne_stb_1990$race_cls, "WL"= 1, "WM" = 2, "BL" = 3, "BM" = 4, "AL" = 5, "AM" = 6, "HL" = 7, "HM" = 8, "HD" = 9)
 
@@ -373,7 +455,7 @@ cls_code90 = data.frame(cls90 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM"
 results90 = merge(cls_code90, lm_df90, by = "class", all.x = TRUE)
 
 
-# write.csv(results90, "dane/landscape_metrics_1990.csv", row.names = FALSE)
+# write.csv(results00, "dane/landscape_metrics_2000.csv", row.names = FALSE)
 
 
 np90 = lsm_l_np(cls90)
@@ -389,7 +471,8 @@ results90 %>%
   kable_classic_2(full_width = F) %>%
   column_spec(1, background = cls_color)
 ```
-
+<font size="4">W 1990r. dominuje przeważająco ludność biała, zajmując łącznie 79,5% obszaru oraz mając najwięcej płatów, zaraz za nią plasuje się ludność czarna zajmując ok. 19,5%. Najmniej ma kolejno ludność o dużym zróżnicowaniu oraz Latynosi. Brak danych dla ludności azjatyckiej (lub brak takiej ludności). Agregacja jest bardzo wysoka - płaty mają znikome rozproszenie.
+<br><br>
 ```{r, warning=FALSE, message=FALSE, echo = TRUE}
 wayne_stb_2000$cls00 = recode(wayne_stb_2000$race_cls, "WL"= 1, "WM" = 2, "BL" = 3, "BM" = 4, "AL" = 5, "AM" = 6, "HL" = 7, "HM" = 8, "HD" = 9)
 
@@ -428,7 +511,8 @@ results00 %>%
   kable_classic_2(full_width = F) %>%
   column_spec(1, background = cls_color)
 ```
-
+<font size="4">W 2000r. zauważamy względem 1990r. spadek zajętego obszaru WL o 10,7 p.p.. oraz wzrost zajętego obszaru WM o 7,1 p.p. Również niewielkie zmiany dla ludności czarnej oraz ludności o dużym zróżnicowaniu. Nadal brak danych dla Azjatów. Zaś agregacja nadal na wysokim poziomie.
+<br><br>
 ```{r, warning=FALSE, message=FALSE, echo = TRUE}
 wayne_stb_2010$cls10 = recode(wayne_stb_2010$race_cls, "WL"= 1, "WM" = 2, "BL" = 3, "BM" = 4, "AL" = 5, "AM" = 6, "HL" = 7, "HM" = 8, "HD" = 9)
 
@@ -466,7 +550,8 @@ results10 %>%
   kable_classic_2(full_width = F) %>%
   column_spec(1, background = cls_color)
 ```
-
+<font size="4">W 2010r. względem 1990r. zauważamy jeszcze większe zmiany w obszarze zajętym przez ludność. WL traci łącznie 22,2 p.p., WM zyskuje 14,4 p.p. Ludność czarna zyskuje 3 p.p. Zwiększyła się liczba płatów, która wpłynęła na stosunek powierzchni największego płata do powierzchni obszaru. W tym przypadku wartości zmieniają się bardzo dla WL oraz WM, w mniejszym stopniu dla BL. Jednak nie ma to wpływu na poziom agregacji, który nadal jest bardzo wysoki.
+<br><br>
 ```{r, warning=FALSE, message=FALSE, echo = TRUE}
 wayne_stb_2020$cls20 = recode(wayne_stb_2020$race_cls, "WL"= 1, "WM" = 2, "BL" = 3, "BM" = 4, "AL" = 5, "AM" = 6, "HL" = 7, "HM" = 8, "HD" = 9)
 
@@ -502,6 +587,7 @@ plot(cls20, col = cls_color, main = "2020")
 results20 %>%
   kbl() %>%
   kable_classic_2(full_width = F) %>%
-  column_spec(1, background = "cls_color")
+  column_spec(1, background = cls_color)
 ```
-
+<font size="4">W 2020r. porównując do 1990r. dochodzi do największych zmian w udziale zajętego obszaru. WL traci aż 40 p.p., WM zyskuje 23,8 p.p., ludność czarna zyskuje 3,45 p.p. (1,8 p.p. względem 2000 roku oraz 0,45 p.p. względem 2010 roku). Liczba płatów zmnieniła się na korzyść ludości o dużym zróżnicowaniu HD - 30 względem 8 z 1990r. Wartości lpi jeszcze bardziej się zmniejszyły względem 2010r. choć niewiele wzrosło w przypadku HD oraz WM. Na dodatek pojawili się Azjaci o średnim zróżnicowaniu. Najmniejsza agregacja występuje u Latynosów o niskim zróżnicowaniu - świadczy to o tym, że część komórek tej klasy nie graniczy ze sobą.
+<br><br>
