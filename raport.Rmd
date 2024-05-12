@@ -5,9 +5,33 @@ date: "2024-04-23"
 output:
   html_document:
     code_folding: hide
+    toc: true
+    toc_float:
+      collapsed: true
+    css: "styles.css"
 encoding: 'utf-8'
 ---
+<button id="scrollToTopButton">^</button>
+<script>document.addEventListener("DOMContentLoaded", function() {
+    var button = document.getElementById("scrollToTopButton");
+    button.style.display = (window.pageYOffset > 100) ? "block" : "none";
+});</script>
 
+<script>window.addEventListener("scroll", function() {
+    var button = document.getElementById("scrollToTopButton");
+    if (window.pageYOffset > 100) {
+        button.style.display = "block";
+    } else {
+        button.style.display = "none";
+    }
+});</script>
+
+<script>document.getElementById("scrollToTopButton").addEventListener("click", function() {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+});</script>
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
@@ -26,6 +50,7 @@ wayne_idx_2020 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_2020')
 # Przestrzenny rozkład segregacji oraz zróżnicowania rasowego w hrabstwie w latach 1990-2020
 
 ### Rozkład wartości wskaźnika H na poziomie obszarów spisowych dla poszczególnych lat
+
 ```{r}
 p1 <- ggplot(data = wayne_idx_1990) +
   geom_sf(aes(fill = H)) +
@@ -131,10 +156,10 @@ combined2 = combined2 + plot_annotation("Klasyfikacja wkaźnika H na poziomie ob
 print(combined2)
 ```
 
-
 <font size="4">Badając przestrzenny rozkład wartości wskaźnika H można zaobserwować różnice pomiędzy częściami Hrabstwa Wayne. W 2020 roku obszarem o największym poziomie segregacji rasowej były głównie obszary spisowe znajdujące się w centrum miasta, w szczególności te w północnej części. Porównując wizualizacje dla poszczególnych lat można również zaobserwować stopniowe zmiany na obszarze w skali czasowej gdzie wyróżnia się rzadziej zaludniona południowa część badanego obszaru. Widać tam spadek poziomu segregacji rasowej na przestrzeni okresu od 1990 do 2020. Pewną tendencją spadkową wykazało się również same centrum miasta gdzie w latach 1990 i 2010 występowały obszary o maksymalnej wartości wskaźnika teorii informacji H. Najmniejszą zmiennością wykazały się obszary położone na północ od centrum miasta gdzie poziom segregacji rasowej utrzymywał się na podobnym poziomie na przestrzeni badanego okresu. Ogólnie na podstawie map rozkładu wartości wskaźnika H można stwierdzieć, że poziom segregacji rasowej na terenie Hrabstwa Wayne w latach 1990-2020 stopniowo spadał.
 
 ### Rozkład wartości entropii standaryzowanej na poziomie obszarów spisowych dla poszczególnych lat
+
 ```{r}
 p1 <- ggplot(data = wayne_idx_1990) +
   geom_sf(aes(fill = Estd)) +
@@ -181,6 +206,7 @@ print(p2)
 print(p3)
 print(p4)
 ```
+
 ```{r}
 cls_color <- c("L"= "#008000", "M"= "#FFFF00", "H"= "#FF0000")
 
@@ -242,6 +268,7 @@ print(combined2)
 <font size="4">Na podstawie przestrzennej reprezentacji poziomu entropi zestandarysowanej dla poszczególnych obszarów spisowych Hrabstwa Wayne można zauważyć drastyczne zmiany w poziomie zróżnicowania rasowego regionu. Podczas gdy w roku 1990 niemal jedynym obszarem o dużej różnorodności rasowej było centrum miasta, z każdą następną dekadą widać jak poziom zróżnicowania rasowego na obrzeżach miasta stopniowo rośnie. Podczas gdy w samym centrum różnorodniość etniczna również wzrosła, niezwykle gwałtowną tendencją wzrostową wykazały się rzadziej zaludnione południowe obszary spisowe Hrabstwa Wayne, gdzie w 1990 roku przeważały obszary o niskim poziomie zróżnicowania rasowego natomiast w roku 2020 dorównują one w swojej wieloetniczności poziomom obserwowanym w centrum. Najmniejszą zmiennością podobnie jak w przypadku wskaźnika H wykazały się tereny na północ od głównego skupiska miejskiego.
 
 ### Typy struktur rasowo-etnicznych
+
 ```{r}
 biv_colors = stevens.bluered()
 names(biv_colors) = c("LL", "ML", "HL", "LM", "MM", "HM", "LH", "MH", "HH")
@@ -292,21 +319,189 @@ print(p3)
 print(p4)
 ```
 
-<font size="4">Powyższy wykres przedstawia typy struktur rasowo etnicznych dla obszarów spisowych w Hrabstwie Wayne dla poszczególnych lat. Kategorie zostały stworzone poprzez kombinację klasyfikacji entropii zestandaryzowanej (pierwsza litera) i wzkaźnika H (druga litera): L - niski poziom, M - średni poziom, H - wysoki poziom. Na podstawie wizualizacji można zaobserwować, że podczas gdy w roku 1990 poza centrum miasta dominowały obszary o niskim zróżnicowaniu rasowym i niskiej segregacj (LL), w kolejnych latah coraz bardziej dominujące stały się obszary o średnim zróżnicowaniu i  niskiej segregacj (ML). Zarówno w centrum jak i na obrzeżach miasta pojawiło się również znacznie więcej obszarów o wysokim zróżnicowaniu etnicznym i niskiej segregacji (HL). W żadnym z badanych lat nie wystąpiły natomiast obszary o wysokim poziomie segregacji i zróżnicowania rasowego. Zwłasza w pobliżu centrum pojawiło się dużo obszarów o średniej wartości obydwu wskaźników. Niezaskakująco, miejscem które wykazało się najmniejszą zmiennością w czasie są obszary znajdujące się na północny-zachód od śródmieścia.
- 
+<font size="4">Powyższy wykres przedstawia typy struktur rasowo etnicznych dla obszarów spisowych w Hrabstwie Wayne dla poszczególnych lat. Kategorie zostały stworzone poprzez kombinację klasyfikacji entropii zestandaryzowanej (pierwsza litera) i wzkaźnika H (druga litera): L - niski poziom, M - średni poziom, H - wysoki poziom. Na podstawie wizualizacji można zaobserwować, że podczas gdy w roku 1990 poza centrum miasta dominowały obszary o niskim zróżnicowaniu rasowym i niskiej segregacj (LL), w kolejnych latah coraz bardziej dominujące stały się obszary o średnim zróżnicowaniu i niskiej segregacj (ML). Zarówno w centrum jak i na obrzeżach miasta pojawiło się również znacznie więcej obszarów o wysokim zróżnicowaniu etnicznym i niskiej segregacji (HL). W żadnym z badanych lat nie wystąpiły natomiast obszary o wysokim poziomie segregacji i zróżnicowania rasowego. Zwłasza w pobliżu centrum pojawiło się dużo obszarów o średniej wartości obydwu wskaźników. Niezaskakująco, miejscem które wykazało się najmniejszą zmiennością w czasie są obszary znajdujące się na północny-zachód od śródmieścia.
 
 ### Ilość obszarów spisowych dla poszczególnych typów w 1990 roku
+
 ```{r}
 table(wayne_idx_1990$biv_cls)
 ```
 
 ### Ilość obszarów spisowych dla poszczególnych typów w 2020 roku
+
 ```{r}
 table(wayne_idx_2020$biv_cls)
 ```
 
+# Wykorzystanie metod analizy krajobrazowej w analizie rasowo-etnicznej struktury ludności
+
+```{r, include=FALSE}
+library(landscapemetrics)
+library(fasterize)
+library(tidyverse)
+library(kableExtra)
+
+
+wayne_stb_1990 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_1990')
+wayne_stb_2000 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_2000')
+wayne_stb_2010 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_2010')
+wayne_stb_2020 <- st_read("dane/wayne.gpkg", layer = 'wayne_stb_2020')
+```
+
+```{r, warning=FALSE, message=FALSE, echo = TRUE}
+wayne_stb_1990$cls90 = recode(wayne_stb_1990$race_cls, "WL"= 1, "WM" = 2, "BL" = 3, "BM" = 4, "AL" = 5, "AM" = 6, "HL" = 7, "HM" = 8, "HD" = 9)
+
+rast90 <- raster(wayne_stb_1990, res = 100)
+# rast90
+
+cls90 = fasterize(wayne_stb_1990, rast90, field = "cls90", fun="sum")
+
+cls_color <- c("#FF8C00", "#FFD700", "#006400", "#32CD32", "#CD5555", "#FF6A6A", "#5D478B", "#9370DB", "#8F8F8F")
+
+# plot(cls90, col = cls_color)
+
+
+class_metr = list_lsm(level = "class")
+
+lm90 = calculate_lsm(cls90, level = ("class"), what = c("lsm_c_np", "lsm_c_lpi",  "lsm_c_pland", "lsm_c_ai"))
+
+lm_df90 = pivot_wider(lm90[, c("class", "metric", "value")], names_from = metric, values_from = value)
+
+# lm_df90
+
+cls_code90 = data.frame(cls90 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM", "HD"), class = 1:9)
+results90 = merge(cls_code90, lm_df90, by = "class", all.x = TRUE)
+
+
+# write.csv(results90, "dane/landscape_metrics_1990.csv", row.names = FALSE)
+
+
+np90 = lsm_l_np(cls90)
+# np90
+
+lpi90 = lsm_l_lpi(cls90)
+# lpi90
+
+plot(cls90, col = cls_color, main = "1990")
+
+results90 %>%
+  kbl() %>%
+  kable_classic_2(full_width = F) %>%
+  column_spec(1, background = cls_color)
+```
+
+```{r, warning=FALSE, message=FALSE, echo = TRUE}
+wayne_stb_2000$cls00 = recode(wayne_stb_2000$race_cls, "WL"= 1, "WM" = 2, "BL" = 3, "BM" = 4, "AL" = 5, "AM" = 6, "HL" = 7, "HM" = 8, "HD" = 9)
+
+rast00 <- raster(wayne_stb_2000, res = 100)
+# rast00
+
+cls00 = fasterize(wayne_stb_2000, rast00, field = "cls00", fun="sum")
+
+# plot(cls00, col = cls_color)
 
 
 
+lm00 = calculate_lsm(cls00, level = ("class"), what = c("lsm_c_np", "lsm_c_lpi",  "lsm_c_pland", "lsm_c_ai"))
 
+lm_df00 = pivot_wider(lm00[, c("class", "metric", "value")], names_from = metric, values_from = value)
+
+# lm_df00
+
+cls_code00 = data.frame(cls00 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM", "HD"), class = 1:9)
+results00 = merge(cls_code00, lm_df00, by = "class", all.x = TRUE)
+
+
+# write.csv(results00, "dane/landscape_metrics_2000.csv", row.names = FALSE)
+
+
+np00 = lsm_l_np(cls00)
+# np00
+
+lpi00 = lsm_l_lpi(cls00)
+# lpi00
+
+plot(cls00, col = cls_color, main = "2000")
+
+results00 %>%
+  kbl() %>%
+  kable_classic_2(full_width = F) %>%
+  column_spec(1, background = cls_color)
+```
+
+```{r, warning=FALSE, message=FALSE, echo = TRUE}
+wayne_stb_2010$cls10 = recode(wayne_stb_2010$race_cls, "WL"= 1, "WM" = 2, "BL" = 3, "BM" = 4, "AL" = 5, "AM" = 6, "HL" = 7, "HM" = 8, "HD" = 9)
+
+rast10 <- raster(wayne_stb_2010, res = 100)
+# rast10
+
+cls10 = fasterize(wayne_stb_2010, rast10, field = "cls10", fun="sum")
+
+# plot(cls10, col = cls_color)
+
+
+lm10 = calculate_lsm(cls10, level = ("class"), what = c("lsm_c_np", "lsm_c_lpi",  "lsm_c_pland", "lsm_c_ai"))
+
+lm_df10 = pivot_wider(lm10[, c("class", "metric", "value")], names_from = metric, values_from = value)
+
+# lm_df10
+
+cls_code10 = data.frame(cls10 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM", "HD"), class = 1:9)
+results10 = merge(cls_code10, lm_df10, by = "class", all.x = TRUE)
+
+
+# write.csv(results10, "dane/landscape_metrics_2010.csv", row.names = FALSE)
+
+
+np10 = lsm_l_np(cls10)
+# np10
+
+lpi10 = lsm_l_lpi(cls10)
+# lpi10
+
+plot(cls10, col = cls_color, main = "2010")
+
+results10 %>%
+  kbl() %>%
+  kable_classic_2(full_width = F) %>%
+  column_spec(1, background = cls_color)
+```
+
+```{r, warning=FALSE, message=FALSE, echo = TRUE}
+wayne_stb_2020$cls20 = recode(wayne_stb_2020$race_cls, "WL"= 1, "WM" = 2, "BL" = 3, "BM" = 4, "AL" = 5, "AM" = 6, "HL" = 7, "HM" = 8, "HD" = 9)
+
+rast20 <- raster(wayne_stb_2020, res = 100)
+# rast20
+
+cls20 = fasterize(wayne_stb_2020, rast20, field = "cls20", fun="sum")
+
+# plot(cls20, col = cls_color)
+
+
+lm20 = calculate_lsm(cls20, level = ("class"), what = c("lsm_c_np", "lsm_c_lpi",  "lsm_c_pland", "lsm_c_ai"))
+
+lm_df20 = pivot_wider(lm20[, c("class", "metric", "value")], names_from = metric, values_from = value)
+
+# lm_df20
+
+cls_code20 = data.frame(cls20 = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM", "HD"), class = 1:9)
+results20 = merge(cls_code20, lm_df20, by = "class", all.x = TRUE)
+
+
+# write.csv(results20, "dane/landscape_metrics_2020.csv", row.names = FALSE)
+
+
+np20 = lsm_l_np(cls20)
+# np20
+
+lpi20 = lsm_l_lpi(cls20)
+# lpi20
+
+plot(cls20, col = cls_color, main = "2020")
+
+results20 %>%
+  kbl() %>%
+  kable_classic_2(full_width = F) %>%
+  column_spec(1, background = "cls_color")
+```
 
