@@ -406,6 +406,800 @@ colSums(trans_matrix) # dla typów w 2020
 ```
 Po zsumowaniu wartości w wierszach i kolumnach widzimy, że największą dominację ma ludność biała oraz czarna. Sytuacja ta nie zmienia się w 2020, lecz udział WL spadł na rzecz WM, HD, BM.
 
+# **3. Analiza zmian typów struktury rasowo-etnicznej ludności (klasyfikacja na 9 typów na podstawie procentowego udziału danej grupy rasowo-etnicznej)**
+
+### **3.1. Mapa typów zróżnicowania rasowego dla roku 1990, 2000, 2010, 2020**
+
+```{r, fig.width=12, fig.height=9, warning=FALSE, message=FALSE, echo = TRUE, results = 'hide'}
+## Wczytanie danych
+wayne_aggr1990 =  read.csv('dane\\wayne_aggr_1990.csv')
+wayne_1990 = read.csv('dane\\wayne_1990.csv')
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+bnd_1990 <- st_read("dane\\wayne.gpkg", layer = "wayne_1990")
+
+wayne_1990$tot = wayne_1990$whites + wayne_1990$blacks + wayne_1990$asians + wayne_1990$native_americans + wayne_1990$others + wayne_1990$latino
+
+## Wczytanie funkcji
+entropy = function(pi){
+  entropy = -sum(pi*log(pi), na.rm = TRUE)
+  return(entropy)}
+
+bivcol = function(pal){
+  tit = substitute(pal)
+  pal = pal()
+  ncol = length(pal)
+  image(matrix(seq_along(pal), nrow = sqrt(ncol)),
+        axes = FALSE, 
+        col = pal, 
+        asp = 1)
+  mtext(tit)
+}
+
+
+#utworzenie ramki danych zawierajacej identyfikator obszaru spisowego (GISJOINT) oraz ogólną liczbę ludności dla każdego obszaru spisowego. 
+out_ct_1990 <- data.frame(GISJOIN_T = wayne_aggr1990$GISJOIN_T, pop = wayne_aggr1990$tot)
+
+#obliczenie odsetka ras dla poszczegolnych obszarow spisowych (dane wejsciowe do obliczenia entropii)
+perc_ct_1990 <- wayne_aggr1990[,list_race]/wayne_aggr1990$tot
+
+#obliczenie entopii dla każdego obszaru spisowego oraz dodanie jej do obiektu out_ct
+out_ct_1990$ent <- apply(perc_ct_1990, 1, entropy)
+
+out_block_1990 <- data.frame(GISJOIN = wayne_1990$GISJOIN, GISJOIN_T = wayne_1990$GISJOIN_T, pop_i = wayne_1990$tot)
+
+#obliczenie odsetka wg ras dla każdego bloku (dane wejsciowe do obliczenia entropii dla bloku)
+perc_block_1990 <- wayne_1990[,list_race]/wayne_1990$tot
+perc_block_1990[is.na(perc_block_1990)] <- 0
+
+# obliczenie entropii dla każdego bloku 
+out_block_1990$ent_i <- apply(perc_block_1990, 1, entropy)
+
+calc_df_1990 <- merge(out_ct_1990, out_block_1990, by="GISJOIN_T")
+calc_df_1990 <- calc_df_1990[, c("GISJOIN_T", "GISJOIN", "pop", "pop_i", "ent", "ent_i")]
+
+calc_df_1990$H <- calc_df_1990$pop_i*(calc_df_1990$ent-calc_df_1990$ent_i)/(calc_df_1990$ent*calc_df_1990$pop)
+
+h_index_1990 <- aggregate(H~GISJOIN_T, calc_df_1990, sum)
+
+out_ct_1990 <- merge(out_ct_1990, h_index_1990, by = "GISJOIN_T")
+colnames(out_ct_1990) <- c("GISJOIN_T", "tot", "E", "H")
+
+#obliczenie entropii standaryzowanej 
+out_ct_1990$Estd <- out_ct_1990$E/log(length(list_race))
+
+out_1990 <- merge(wayne_aggr1990, out_ct_1990[,-2], by="GISJOIN_T")
+
+biv_1990 <-  expand.grid(ent = c("L", "M", "H"), h=c("L", "M", "H"))
+biv_1990$biv_cls <- paste(biv_1990$ent,biv_1990$h,  sep="")
+
+out_1990$Estd_cls <- cut(out_1990$Estd, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
+out_1990$H_cls <- cut(out_1990$H, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
+out_1990$biv_cls <- paste(out_1990$Estd_cls, out_1990$H_cls, sep="")
+
+## Zapisanie wyniku
+
+#write.csv(out,"dane\\wayne_aggr_idx_1990.csv")
+
+## Polaczenie wyliczonych danych z danymi przestrzennymi
+
+bnd_attr_1990 <- merge(select(bnd_1990,-any_of(c(list_race,'tot'))), out_1990, by.x = "GISJOIN", by.y = "GISJOIN_T")
+
+## Wizualizacja wkaznikow na mapach
+
+#plot(bnd_attr_1990["H"])
+# 
+#legenda 
+biv_colors = stevens.bluered()
+names(biv_colors) = c("LL", "ML", "HL", "LM", "MM", "HM", "LH", "MH", "HH")
+# 
+plot1 = ggplot(bnd_attr_1990) + 
+  geom_sf(aes(fill = biv_cls)) + 
+  scale_fill_manual(values = biv_colors) + 
+  theme_bw() +
+  labs(title = "1990") +
+  theme(plot.title = element_text(size = 20, hjust = 0.5))
+
+
+
+## Wczytanie danych
+wayne_aggr2000 =  read.csv('dane\\wayne_aggr_2000.csv')
+wayne_2000 = read.csv('dane\\wayne_2000.csv')
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+bnd_2000 <- st_read("dane\\wayne.gpkg", layer = "wayne_2000")
+
+wayne_2000$tot = wayne_2000$whites + wayne_2000$blacks + wayne_2000$asians + wayne_2000$native_americans + wayne_2000$others + wayne_2000$latino
+
+## Wczytanie funkcji
+entropy = function(pi){
+  entropy = -sum(pi*log(pi), na.rm = TRUE)
+  return(entropy)}
+
+bivcol = function(pal){
+  tit = substitute(pal)
+  pal = pal()
+  ncol = length(pal)
+  image(matrix(seq_along(pal), nrow = sqrt(ncol)),
+        axes = FALSE, 
+        col = pal, 
+        asp = 1)
+  mtext(tit)
+}
+
+
+#utworzenie ramki danych zawierajacej identyfikator obszaru spisowego (GISJOINT) oraz ogólną liczbę ludności dla każdego obszaru spisowego. 
+out_ct_2000 <- data.frame(GISJOIN_T = wayne_aggr2000$GISJOIN_T, pop = wayne_aggr2000$tot)
+
+#obliczenie odsetka ras dla poszczegolnych obszarow spisowych (dane wejsciowe do obliczenia entropii)
+perc_ct_2000 <- wayne_aggr2000[,list_race]/wayne_aggr2000$tot
+
+#obliczenie entopii dla każdego obszaru spisowego oraz dodanie jej do obiektu out_ct
+out_ct_2000$ent <- apply(perc_ct_2000, 1, entropy)
+
+out_block_2000 <- data.frame(GISJOIN = wayne_2000$GISJOIN, GISJOIN_T = wayne_2000$GISJOIN_T, pop_i = wayne_2000$tot)
+
+#obliczenie odsetka wg ras dla każdego bloku (dane wejsciowe do obliczenia entropii dla bloku)
+perc_block_2000 <- wayne_2000[,list_race]/wayne_2000$tot
+perc_block_2000[is.na(perc_block_2000)] <- 0
+
+# obliczenie entropii dla każdego bloku 
+out_block_2000$ent_i <- apply(perc_block_2000, 1, entropy)
+
+calc_df_2000 <- merge(out_ct_2000, out_block_2000, by="GISJOIN_T")
+calc_df_2000 <- calc_df_2000[, c("GISJOIN_T", "GISJOIN", "pop", "pop_i", "ent", "ent_i")]
+
+calc_df_2000$H <- calc_df_2000$pop_i*(calc_df_2000$ent-calc_df_2000$ent_i)/(calc_df_2000$ent*calc_df_2000$pop)
+
+h_index_2000 <- aggregate(H~GISJOIN_T, calc_df_2000, sum)
+
+out_ct_2000 <- merge(out_ct_2000, h_index_2000, by = "GISJOIN_T")
+colnames(out_ct_2000) <- c("GISJOIN_T", "tot", "E", "H")
+
+#obliczenie entropii standaryzowanej 
+out_ct_2000$Estd <- out_ct_2000$E/log(length(list_race))
+
+out_2000 <- merge(wayne_aggr2000, out_ct_2000[,-2], by="GISJOIN_T")
+
+biv_2000 <-  expand.grid(ent = c("L", "M", "H"), h=c("L", "M", "H"))
+biv_2000$biv_cls <- paste(biv_2000$ent,biv_2000$h,  sep="")
+
+out_2000$Estd_cls <- cut(out_2000$Estd, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
+out_2000$H_cls <- cut(out_2000$H, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
+out_2000$biv_cls <- paste(out_2000$Estd_cls, out_2000$H_cls, sep="")
+
+## Zapisanie wyniku
+
+#write.csv(out,"dane\\wayne_aggr_idx_2000.csv")
+
+## Polaczenie wyliczonych danych z danymi przestrzennymi
+
+bnd_attr_2000 <- merge(select(bnd_2000,-any_of(c(list_race,'tot'))), out_2000, by.x = "GISJOIN", by.y = "GISJOIN_T")
+
+## Wizualizacja wkaznikow na mapach
+
+#plot(bnd_attr_2000["H"])
+# 
+#legenda 
+biv_colors = stevens.bluered()
+names(biv_colors) = c("LL", "ML", "HL", "LM", "MM", "HM", "LH", "MH", "HH")
+# 
+plot2 = ggplot(bnd_attr_2000) + 
+  geom_sf(aes(fill = biv_cls)) + 
+  scale_fill_manual(values = biv_colors) + 
+  theme_bw() +
+  labs(title = "2000") +
+  theme(plot.title = element_text(size = 20, hjust = 0.5))
+
+
+
+
+## Wczytanie danych
+wayne_aggr2010 =  read.csv('dane\\wayne_aggr_2010.csv')
+wayne_2010 = read.csv('dane\\wayne_2010.csv')
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+bnd_2010 <- st_read("dane\\wayne.gpkg", layer = "wayne_2010")
+
+wayne_2010$tot = wayne_2010$whites + wayne_2010$blacks + wayne_2010$asians + wayne_2010$native_americans + wayne_2010$others + wayne_2010$latino
+
+## Wczytanie funkcji
+entropy = function(pi){
+  entropy = -sum(pi*log(pi), na.rm = TRUE)
+  return(entropy)}
+
+bivcol = function(pal){
+  tit = substitute(pal)
+  pal = pal()
+  ncol = length(pal)
+  image(matrix(seq_along(pal), nrow = sqrt(ncol)),
+        axes = FALSE, 
+        col = pal, 
+        asp = 1)
+  mtext(tit)
+}
+
+
+#utworzenie ramki danych zawierajacej identyfikator obszaru spisowego (GISJOINT) oraz ogólną liczbę ludności dla każdego obszaru spisowego. 
+out_ct_2010 <- data.frame(GISJOIN_T = wayne_aggr2010$GISJOIN_T, pop = wayne_aggr2010$tot)
+
+#obliczenie odsetka ras dla poszczegolnych obszarow spisowych (dane wejsciowe do obliczenia entropii)
+perc_ct_2010 <- wayne_aggr2010[,list_race]/wayne_aggr2010$tot
+
+#obliczenie entopii dla każdego obszaru spisowego oraz dodanie jej do obiektu out_ct
+out_ct_2010$ent <- apply(perc_ct_2010, 1, entropy)
+
+out_block_2010 <- data.frame(GISJOIN = wayne_2010$GISJOIN, GISJOIN_T = wayne_2010$GISJOIN_T, pop_i = wayne_2010$tot)
+
+#obliczenie odsetka wg ras dla każdego bloku (dane wejsciowe do obliczenia entropii dla bloku)
+perc_block_2010 <- wayne_2010[,list_race]/wayne_2010$tot
+perc_block_2010[is.na(perc_block_2010)] <- 0
+
+# obliczenie entropii dla każdego bloku 
+out_block_2010$ent_i <- apply(perc_block_2010, 1, entropy)
+
+calc_df_2010 <- merge(out_ct_2010, out_block_2010, by="GISJOIN_T")
+calc_df_2010 <- calc_df_2010[, c("GISJOIN_T", "GISJOIN", "pop", "pop_i", "ent", "ent_i")]
+
+calc_df_2010$H <- calc_df_2010$pop_i*(calc_df_2010$ent-calc_df_2010$ent_i)/(calc_df_2010$ent*calc_df_2010$pop)
+
+h_index_2010 <- aggregate(H~GISJOIN_T, calc_df_2010, sum)
+
+out_ct_2010 <- merge(out_ct_2010, h_index_2010, by = "GISJOIN_T")
+colnames(out_ct_2010) <- c("GISJOIN_T", "tot", "E", "H")
+
+#obliczenie entropii standaryzowanej 
+out_ct_2010$Estd <- out_ct_2010$E/log(length(list_race))
+
+out_2010 <- merge(wayne_aggr2010, out_ct_2010[,-2], by="GISJOIN_T")
+
+biv_2010 <-  expand.grid(ent = c("L", "M", "H"), h=c("L", "M", "H"))
+biv_2010$biv_cls <- paste(biv_2010$ent,biv_2010$h,  sep="")
+
+out_2010$Estd_cls <- cut(out_2010$Estd, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
+out_2010$H_cls <- cut(out_2010$H, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
+out_2010$biv_cls <- paste(out_2010$Estd_cls, out_2010$H_cls, sep="")
+
+## Zapisanie wyniku
+
+#write.csv(out,"dane\\wayne_aggr_idx_2010.csv")
+
+## Polaczenie wyliczonych danych z danymi przestrzennymi
+
+bnd_attr_2010 <- merge(select(bnd_2010,-any_of(c(list_race,'tot'))), out_2010, by.x = "GISJOIN", by.y = "GISJOIN_T")
+
+## Wizualizacja wkaznikow na mapach
+
+#plot(bnd_attr_2010["H"])
+# 
+#legenda 
+biv_colors = stevens.bluered()
+names(biv_colors) = c("LL", "ML", "HL", "LM", "MM", "HM", "LH", "MH", "HH")
+# 
+plot3 = ggplot(bnd_attr_2010) + 
+  geom_sf(aes(fill = biv_cls)) + 
+  scale_fill_manual(values = biv_colors) + 
+  theme_bw() +
+  labs(title = "2010") +
+  theme(plot.title = element_text(size = 20, hjust = 0.5))
+
+
+
+
+## Wczytanie danych
+wayne_aggr2020 =  read.csv('dane\\wayne_aggr_2020.csv')
+wayne_2020 = read.csv('dane\\wayne_2020.csv')
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+bnd_2020 <- st_read("dane\\wayne.gpkg", layer = "wayne_2020")
+
+wayne_2020$tot = wayne_2020$whites + wayne_2020$blacks + wayne_2020$asians + wayne_2020$native_americans + wayne_2020$others + wayne_2020$latino
+
+## Wczytanie funkcji
+entropy = function(pi){
+  entropy = -sum(pi*log(pi), na.rm = TRUE)
+  return(entropy)}
+
+bivcol = function(pal){
+  tit = substitute(pal)
+  pal = pal()
+  ncol = length(pal)
+  image(matrix(seq_along(pal), nrow = sqrt(ncol)),
+        axes = FALSE, 
+        col = pal, 
+        asp = 1)
+  mtext(tit)
+}
+
+
+#utworzenie ramki danych zawierajacej identyfikator obszaru spisowego (GISJOINT) oraz ogólną liczbę ludności dla każdego obszaru spisowego. 
+out_ct_2020 <- data.frame(GISJOIN_T = wayne_aggr2020$GISJOIN_T, pop = wayne_aggr2020$tot)
+
+#obliczenie odsetka ras dla poszczegolnych obszarow spisowych (dane wejsciowe do obliczenia entropii)
+perc_ct_2020 <- wayne_aggr2020[,list_race]/wayne_aggr2020$tot
+
+#obliczenie entopii dla każdego obszaru spisowego oraz dodanie jej do obiektu out_ct
+out_ct_2020$ent <- apply(perc_ct_2020, 1, entropy)
+
+out_block_2020 <- data.frame(GISJOIN = wayne_2020$GISJOIN, GISJOIN_T = wayne_2020$GISJOIN_T, pop_i = wayne_2020$tot)
+
+#obliczenie odsetka wg ras dla każdego bloku (dane wejsciowe do obliczenia entropii dla bloku)
+perc_block_2020 <- wayne_2020[,list_race]/wayne_2020$tot
+perc_block_2020[is.na(perc_block_2020)] <- 0
+
+# obliczenie entropii dla każdego bloku 
+out_block_2020$ent_i <- apply(perc_block_2020, 1, entropy)
+
+calc_df_2020 <- merge(out_ct_2020, out_block_2020, by="GISJOIN_T")
+calc_df_2020 <- calc_df_2020[, c("GISJOIN_T", "GISJOIN", "pop", "pop_i", "ent", "ent_i")]
+
+calc_df_2020$H <- calc_df_2020$pop_i*(calc_df_2020$ent-calc_df_2020$ent_i)/(calc_df_2020$ent*calc_df_2020$pop)
+
+h_index_2020 <- aggregate(H~GISJOIN_T, calc_df_2020, sum)
+
+out_ct_2020 <- merge(out_ct_2020, h_index_2020, by = "GISJOIN_T")
+colnames(out_ct_2020) <- c("GISJOIN_T", "tot", "E", "H")
+
+#obliczenie entropii standaryzowanej 
+out_ct_2020$Estd <- out_ct_2020$E/log(length(list_race))
+
+out_2020 <- merge(wayne_aggr2020, out_ct_2020[,-2], by="GISJOIN_T")
+
+biv_2020 <-  expand.grid(ent = c("L", "M", "H"), h=c("L", "M", "H"))
+biv_2020$biv_cls <- paste(biv_2020$ent,biv_2020$h,  sep="")
+
+out_2020$Estd_cls <- cut(out_2020$Estd, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
+out_2020$H_cls <- cut(out_2020$H, breaks = c(0, 0.33, 0.66, 1), labels = c("L", "M", "H"), include.lowest = TRUE, right = TRUE)
+out_2020$biv_cls <- paste(out_2020$Estd_cls, out_2020$H_cls, sep="")
+
+## Zapisanie wyniku
+
+#write.csv(out,"dane\\wayne_aggr_idx_2020.csv")
+
+## Polaczenie wyliczonych danych z danymi przestrzennymi
+
+bnd_attr_2020 <- merge(select(bnd_2020,-any_of(c(list_race,'tot'))), out_2020, by.x = "GISJOIN", by.y = "GISJOIN_T")
+
+## Wizualizacja wkaznikow na mapach
+
+#plot(bnd_attr_2020["H"])
+# 
+#legenda 
+biv_colors = stevens.bluered()
+names(biv_colors) = c("LL", "ML", "HL", "LM", "MM", "HM", "LH", "MH", "HH")
+# 
+plot4 = ggplot(bnd_attr_2020) + 
+  geom_sf(aes(fill = biv_cls)) + 
+  scale_fill_manual(values = biv_colors) + 
+  theme_bw() +
+  labs(title = "2020") +
+  theme(plot.title = element_text(size = 20, hjust = 0.5))
+
+
+combined_plot1 <- plot1 + plot2 + plot3 + plot4 + plot_layout(ncol = 2)
+combined_plot1
+```
+
+TUTAJ TEKST
+
+### **3.2 Mapa zmian między rokiem 1990-2000, 2000-2010, 2010-2020, 1990-2020**
+
+```{r, results = 'hide'}
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+
+wayne_stb_1990 = st_read("dane//wayne.gpkg", layer = 'wayne_stb_1990')
+wayne_stb_2000 = st_read("dane//wayne.gpkg", layer = 'wayne_stb_2000')
+
+cls_df = data.frame(GISJOIN = wayne_stb_1990$GISJOIN,
+                    cls1990 = wayne_stb_1990$race_cls,
+                    cls2000 = wayne_stb_2000$race_cls)
+
+st_geometry(cls_df)<-wayne_stb_2000$geom
+
+#table(cls_df$cls1990)
+#table(cls_df$cls2000)
+
+tab1990 <- prop.table(table(cls_df$cls1990))*100
+round(tab1990, 1)
+
+tab2000 <- prop.table(table(cls_df$cls2000))*100
+round(tab2000, 1)
+
+tab <- table(cls_df$cls1990, cls_df$cls2000)
+tab
+
+rowSums(tab)
+colSums(tab)
+
+round(prop.table(table(cls_df$cls1990, cls_df$cls2000))*100, 1)
+
+#plot(cls_df["cls1990"])
+#plot(cls_df["cls2000"])
+
+
+cls_color <- c("AL"= "#CD5555", "AM"= "#FF6A6A", "BL"= "#006400", "BM"= "#32CD32", "HD"= "#8F8F8F", "HL"= "#5D478B", "HM"= "#9370DB", "WL"= "#FF8C00", "WM"= "#FFD700")
+
+col1990 <- cls_color[names(cls_color)%in%unique(cls_df$cls1990)]
+col2000 <- cls_color[names(cls_color)%in%unique(cls_df$cls2000)]
+
+
+p1 <- ggplot(data = cls_df) +
+  geom_sf(aes(fill = cls1990)) +
+  scale_fill_manual(values = col1990) + 
+  labs(title = "Wayne, 1990") + 
+  theme_bw() +
+  theme(legend.position="bottom")
+
+p2 <- ggplot(data = cls_df) +
+  geom_sf(aes(fill = cls2000)) +
+  scale_fill_manual(values = col2000) + 
+  labs(title = "Wayne, 2000") + 
+  theme_bw() +
+  theme(legend.position="bottom")
+
+
+#wyswietlenie wykresow obok siebie
+p1 + p2 + plot_annotation(title = "Zmiany między rokiem 1990-2000", theme = theme(plot.title = element_text(size = 20, hjust = 0.5)))
+```
+
+TUTAJ TEKST
+
+```{r, results='hide'}
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+
+wayne_stb_2000 = st_read("dane//wayne.gpkg", layer = 'wayne_stb_2000')
+wayne_stb_2010 = st_read("dane//wayne.gpkg", layer = 'wayne_stb_2010')
+
+cls_df = data.frame(GISJOIN = wayne_stb_2000$GISJOIN,
+                    cls2000 = wayne_stb_2000$race_cls,
+                    cls2010 = wayne_stb_2010$race_cls)
+
+st_geometry(cls_df)<-wayne_stb_2010$geom
+
+#table(cls_df$cls2000)
+#table(cls_df$cls2010)
+
+tab2000 <- prop.table(table(cls_df$cls2000))*100
+round(tab2000, 1)
+
+tab2010 <- prop.table(table(cls_df$cls2010))*100
+round(tab2010, 1)
+
+tab <- table(cls_df$cls2000, cls_df$cls2010)
+tab
+
+rowSums(tab)
+colSums(tab)
+
+round(prop.table(table(cls_df$cls2000, cls_df$cls2010))*100, 1)
+
+#plot(cls_df["cls2000"])
+#plot(cls_df["cls2010"])
+
+
+cls_color <- c("AL"= "#CD5555", "AM"= "#FF6A6A", "BL"= "#006400", "BM"= "#32CD32", "HD"= "#8F8F8F", "HL"= "#5D478B", "HM"= "#9370DB", "WL"= "#FF8C00", "WM"= "#FFD700")
+
+col2000 <- cls_color[names(cls_color)%in%unique(cls_df$cls2000)]
+col2010 <- cls_color[names(cls_color)%in%unique(cls_df$cls2010)]
+
+
+p1 <- ggplot(data = cls_df) +
+  geom_sf(aes(fill = cls2000)) +
+  scale_fill_manual(values = col2000) + 
+  labs(title = "Wayne, 2000") + 
+  theme_bw() +
+  theme(legend.position="bottom")
+
+p2 <- ggplot(data = cls_df) +
+  geom_sf(aes(fill = cls2010)) +
+  scale_fill_manual(values = col2010) + 
+  labs(title = "Wayne, 2010") + 
+  theme_bw() +
+  theme(legend.position="bottom")
+
+
+#wyswietlenie wykresow obok siebie
+p1 + p2 + plot_annotation(title = "Zmiany między rokiem 2000-2010", theme = theme(plot.title = element_text(size = 20, hjust = 0.5)))
+```
+
+TUTAJ TEKST
+
+```{r, results='hide'}
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+
+wayne_stb_2010 = st_read("dane//wayne.gpkg", layer = 'wayne_stb_2010')
+wayne_stb_2020 = st_read("dane//wayne.gpkg", layer = 'wayne_stb_2020')
+
+cls_df = data.frame(GISJOIN = wayne_stb_2010$GISJOIN,
+                    cls2010 = wayne_stb_2010$race_cls,
+                    cls2020 = wayne_stb_2020$race_cls)
+
+st_geometry(cls_df)<-wayne_stb_2020$geom
+
+#table(cls_df$cls2010)
+#table(cls_df$cls2020)
+
+tab2010 <- prop.table(table(cls_df$cls2010))*100
+round(tab2010, 1)
+
+tab2020 <- prop.table(table(cls_df$cls2020))*100
+round(tab2020, 1)
+
+tab <- table(cls_df$cls2010, cls_df$cls2020)
+tab
+
+rowSums(tab)
+colSums(tab)
+
+round(prop.table(table(cls_df$cls2010, cls_df$cls2020))*100, 1)
+
+#plot(cls_df["cls2010"])
+#plot(cls_df["cls2020"])
+
+
+cls_color <- c("AL"= "#CD5555", "AM"= "#FF6A6A", "BL"= "#006400", "BM"= "#32CD32", "HD"= "#8F8F8F", "HL"= "#5D478B", "HM"= "#9370DB", "WL"= "#FF8C00", "WM"= "#FFD700")
+
+col2010 <- cls_color[names(cls_color)%in%unique(cls_df$cls2010)]
+col2020 <- cls_color[names(cls_color)%in%unique(cls_df$cls2020)]
+
+
+p1 <- ggplot(data = cls_df) +
+  geom_sf(aes(fill = cls2010)) +
+  scale_fill_manual(values = col2010) + 
+  labs(title = "Wayne, 2010") + 
+  theme_bw() +
+  theme(legend.position="bottom")
+
+p2 <- ggplot(data = cls_df) +
+  geom_sf(aes(fill = cls2020)) +
+  scale_fill_manual(values = col2020) + 
+  labs(title = "Wayne, 2020") + 
+  theme_bw() +
+  theme(legend.position="bottom")
+
+
+#wyswietlenie wykresow obok siebie
+p1 + p2 + plot_annotation(title = "Zmiany między rokiem 2010-2020", theme = theme(plot.title = element_text(size = 20, hjust = 0.5)))
+
+```
+
+TUTAJ TEKST
+
+```{r, results='hide'}
+list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
+
+wayne_stb_1990 = st_read("dane//wayne.gpkg", layer = 'wayne_stb_1990')
+wayne_stb_2020 = st_read("dane//wayne.gpkg", layer = 'wayne_stb_2020')
+
+cls_df = data.frame(GISJOIN = wayne_stb_1990$GISJOIN,
+                    cls1990 = wayne_stb_1990$race_cls,
+                    cls2020 = wayne_stb_2020$race_cls)
+
+st_geometry(cls_df)<-wayne_stb_2020$geom
+
+#table(cls_df$cls1990)
+#table(cls_df$cls2020)
+
+tab1990 <- prop.table(table(cls_df$cls1990))*100
+round(tab1990, 1)
+
+tab2020 <- prop.table(table(cls_df$cls2020))*100
+round(tab2020, 1)
+
+tab <- table(cls_df$cls1990, cls_df$cls2020)
+tab
+
+rowSums(tab)
+colSums(tab)
+
+round(prop.table(table(cls_df$cls1990, cls_df$cls2020))*100, 1)
+
+#plot(cls_df["cls1990"])
+#plot(cls_df["cls2020"])
+
+
+cls_color <- c("AL"= "#CD5555", "AM"= "#FF6A6A", "BL"= "#006400", "BM"= "#32CD32", "HD"= "#8F8F8F", "HL"= "#5D478B", "HM"= "#9370DB", "WL"= "#FF8C00", "WM"= "#FFD700")
+
+col1990 <- cls_color[names(cls_color)%in%unique(cls_df$cls1990)]
+col2020 <- cls_color[names(cls_color)%in%unique(cls_df$cls2020)]
+
+
+p1 <- ggplot(data = cls_df) +
+  geom_sf(aes(fill = cls1990)) +
+  scale_fill_manual(values = col1990) + 
+  labs(title = "Wayne, 1990") + 
+  theme_bw() +
+  theme(legend.position="bottom")
+
+p2 <- ggplot(data = cls_df) +
+  geom_sf(aes(fill = cls2020)) +
+  scale_fill_manual(values = col2020) + 
+  labs(title = "Wayne, 2020") + 
+  theme_bw() +
+  theme(legend.position="bottom")
+
+
+#wyswietlenie wykresow obok siebie
+p1 + p2 + plot_annotation(title = "Zmiany między rokiem 1990-2020", theme = theme(plot.title = element_text(size = 20, hjust = 0.5)))
+```
+
+TUTAJ TEKST
+
+
+
+### **3.3. Ilość obszarów spisowych występujących w danym typie struktury rasowo-etnicznej w danym roku.**
+
+```{r, warning=FALSE, message=FALSE, results='hold'}
+library(kableExtra)
+cls_color <- c("#FF8C00", "#FFD700", "#006400", "#32CD32", "#CD5555", "#FF6A6A", "#5D478B", "#9370DB", "#8F8F8F")
+data_p <- data.frame(
+race_str = c("WL", "WM", "BL", "BM", "AL", "AM", "HL", "HM", "HD"),
+  r_1990 = c(335, 46, 174, 58, 0, 0, 0, 1, 11),
+  r_2000 = c(261, 75, 208, 48, 0, 0, 0, 11, 22),
+  r_2010 = c(210, 107, 222, 43, 0, 0, 0, 18, 25),
+  r_2020 = c(125, 151, 201, 61, 0, 2, 5, 10, 70)
+)
+
+data_p %>%
+  kbl() %>%
+  kable_classic_2(full_width = F) %>%
+  column_spec(1, background = cls_color)
+
+```
+
+TUTAJ TEKST
+
+
+### **3.4. Macierz przejść pokazująca zmiany w typach między rokiem 1990-2000, 2000-2010, 2010-2020, 1990-2020**
+
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+# Wczytanie danych dla roku 1990 i 2000
+wayne_1990 <- st_read("dane//wayne.gpkg", layer = "wayne_stb_1990")
+wayne_2000 <- st_read("dane//wayne.gpkg", layer = "wayne_stb_2000")
+
+
+wayne_1990 = st_drop_geometry(wayne_1990)
+wayne_1990 = select(wayne_1990, 1,'race_cls')
+wayne_1990 = rename(wayne_1990, race_cls_1990 = race_cls) 
+
+wayne_2000 = st_drop_geometry(wayne_2000)
+wayne_2000 = select(wayne_2000, 1,'race_cls')
+wayne_2000 = rename(wayne_2000, race_cls_2000 = race_cls) 
+
+wayne_1990_2000 = merge(wayne_1990, wayne_2000, by = "GISJOIN")
+
+ table(wayne_1990_2000$race_cls_1990)
+
+ table(wayne_1990_2000$race_cls_2000)
+
+trans_matrix1 = table(wayne_1990_2000$race_cls_1990, wayne_1990_2000$race_cls_2000)
+trans_matrix1
+
+
+t1 = trans_matrix1 %>%
+  kbl(caption = "<span style='font-size:20px'>Macierz przejść między rokiem 1990-2000</span>") %>%
+  kable_classic_2(full_width = F) %>%
+  kable_styling(bootstrap_options = "striped", latex_options = "scale_down") %>%
+  column_spec(1, bold = TRUE, color = "white", background = "#333") %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333") %>%
+  column_spec(2:7, bold = TRUE, color = "white", background = "gray")
+
+
+# Wczytanie danych dla roku 2000 i 2010
+wayne_2000 <- st_read("dane//wayne.gpkg", layer = "wayne_stb_2000")
+wayne_2010 <- st_read("dane//wayne.gpkg", layer = "wayne_stb_2010")
+
+
+wayne_2000 = st_drop_geometry(wayne_2000)
+wayne_2000 = select(wayne_2000, 1,'race_cls')
+wayne_2000 = rename(wayne_2000, race_cls_2000 = race_cls) 
+
+wayne_2010 = st_drop_geometry(wayne_2010)
+wayne_2010 = select(wayne_2010, 1,'race_cls')
+wayne_2010 = rename(wayne_2010, race_cls_2010 = race_cls) 
+
+wayne_2000_2010 = merge(wayne_2000, wayne_2010, by = "GISJOIN")
+
+ table(wayne_2000_2010$race_cls_2000)
+
+ table(wayne_2000_2010$race_cls_2010)
+
+trans_matrix2 = table(wayne_2000_2010$race_cls_2000, wayne_2000_2010$race_cls_2010)
+
+
+t2 = trans_matrix2 %>%
+  kbl(caption = "<span style='font-size:20px'>Macierz przejść między rokiem 2000-2010</span>") %>%
+  kable_classic_2(full_width = F) %>%
+  kable_styling(bootstrap_options = "striped", latex_options = "scale_down") %>%
+  column_spec(1, bold = TRUE, color = "white", background = "#333") %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333") %>%
+  column_spec(2:7, bold = TRUE, color = "white", background = "gray")
+
+
+
+# Wczytanie danych dla roku 2010 i 2020
+wayne_2010 <- st_read("dane//wayne.gpkg", layer = "wayne_stb_2010")
+wayne_2020 <- st_read("dane//wayne.gpkg", layer = "wayne_stb_2020")
+
+
+wayne_2010 = st_drop_geometry(wayne_2010)
+wayne_2010 = select(wayne_2010, 1,'race_cls')
+wayne_2010 = rename(wayne_2010, race_cls_2010 = race_cls) 
+
+wayne_2020 = st_drop_geometry(wayne_2020)
+wayne_2020 = select(wayne_2020, 1,'race_cls')
+wayne_2020 = rename(wayne_2020, race_cls_2020 = race_cls) 
+
+wayne_2010_2020 = merge(wayne_2010, wayne_2020, by = "GISJOIN")
+
+ table(wayne_2010_2020$race_cls_2010)
+
+ table(wayne_2010_2020$race_cls_2020)
+
+trans_matrix3 = table(wayne_2010_2020$race_cls_2010, wayne_2010_2020$race_cls_2020)
+
+
+
+t3 = trans_matrix3 %>%
+  kbl(caption = "<span style='font-size:20px'>Macierz przejść między rokiem 2010-2020</span>") %>%
+  kable_classic_2(full_width = F) %>%
+  kable_styling(bootstrap_options = "striped", latex_options = "scale_down") %>%
+  column_spec(1, bold = TRUE, color = "white", background = "#333") %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333") %>%
+  column_spec(2:9, bold = TRUE, color = "white", background = "gray")
+
+
+
+# Wczytanie danych dla roku 1990 i 2020
+wayne_1990 <- st_read("dane//wayne.gpkg", layer = "wayne_stb_1990")
+wayne_2020 <- st_read("dane//wayne.gpkg", layer = "wayne_stb_2020")
+
+
+wayne_1990 = st_drop_geometry(wayne_1990)
+wayne_1990 = select(wayne_1990, 1,'race_cls')
+wayne_1990 = rename(wayne_1990, race_cls_1990 = race_cls) 
+
+wayne_2020 = st_drop_geometry(wayne_2020)
+wayne_2020 = select(wayne_2020, 1,'race_cls')
+wayne_2020 = rename(wayne_2020, race_cls_2020 = race_cls) 
+
+wayne_1990_2020 = merge(wayne_1990, wayne_2020, by = "GISJOIN")
+
+ table(wayne_1990_2020$race_cls_1990)
+
+ table(wayne_1990_2020$race_cls_2020)
+
+trans_matrix4 = table(wayne_1990_2020$race_cls_1990, wayne_1990_2020$race_cls_2020)
+
+
+
+t4 = trans_matrix4 %>%
+  kbl(caption = "<span style='font-size:20px'>Macierz przejść między rokiem 1990-2020</span>") %>%
+  kable_classic_2(full_width = F) %>%
+  kable_styling(bootstrap_options = "striped", latex_options = "scale_down") %>%
+  column_spec(1, bold = TRUE, color = "white", background = "#333") %>%
+  row_spec(0, bold = TRUE, color = "white", background = "#333") %>%
+  column_spec(2:9, bold = TRUE, color = "white", background = "gray")
+```
+
+
+```{r}
+# Łączenie tabel
+library(htmltools)
+combined_tables <- HTML(paste(
+  '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; row-gap: 20px; column-gap: 1px">',
+  '<div>', t1, '</div>',
+  '<div>', t2, '</div>',
+  '<div>', t3, '</div>',
+  '<div>', t4, '</div>',
+  '</div>'
+))
+
+# Wyświetlanie
+browsable(tagList(combined_tables))
+```
+
+
+
+TUTAJ TEKST
+
 # **4. Wykorzystanie metod analizy krajobrazowej w analizie rasowo-etnicznej struktury ludności**
 
 ### **4.1 Metryki krajobrazowe**
