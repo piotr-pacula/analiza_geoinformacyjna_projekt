@@ -55,23 +55,24 @@ wayne_idx_2020 <- st_read("dane/wayne.gpkg", layer = 'wayne_idx_2020')
 
 ### **1.2 Hrabstwo Wayne w liczbach**
 
-<font size="4">Liczba ludności w hrabstwie Wayne:​
+Liczba ludności w hrabstwie Wayne:​
 
- <font size="4">1990:  2 111 687​
- <font size="4">2000:  2 061 162​
- <font size="4">2010:  1 820 574​
- <font size="4">2020:  1 793 561​
+- 1990: 2 111 687​
+- 2000: 2 061 162​
+- 2010: 1 820 574​
+- 2020: 1 793 561​
 
- <font size="4">Procentowy udział głównych grup rasowo-etnicznych 1990/2020: ​
 
- <font size="4">Biała: 56.14/47.79
- <font size="4">Afroamerykanie: 40.03/37.32
- <font size="4">Latynosi: 2.39/6.56
- <font size="4">Azjaci: 1.00/3.61​
- <font size="4">Rdzenni Amerykanie: 0.35/0.24
- <font size="4">Inni : 0.08/4.48​
+Procentowy udział głównych grup rasowo-etnicznych 1990/2020: ​
 
- <font size="4">W badanym okresie liczba ludności hrabstwa Wayne zmniejszyła się o ~15%. Zaobserwowano również zmiany w strukturze rasowo-etnicznej.
+- Biała: 56.14/47.79
+- Afroamerykanie: 40.03/37.32
+- Latynosi: 2.39/6.56
+- Azjaci: 1.00/3.61​
+- Rdzenni Amerykanie: 0.35/0.24
+- Inni : 0.08/4.48​
+
+W badanym okresie liczba ludności hrabstwa Wayne zmniejszyła się o ~15%. Zaobserwowano również zmiany w strukturze rasowo-etnicznej.
 
 # **2. Przestrzenny rozkład segregacji oraz zróżnicowania rasowego w hrabstwie w latach 1990-2020**
 
