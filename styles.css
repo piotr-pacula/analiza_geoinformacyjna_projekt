@@ -1,0 +1,107 @@
+/* Styl dla spisu treści */
+#TOC {
+  position: fixed;
+  top: 50px;
+  left: 20px;
+  width: 300px;
+  border: 3px solid #ccc;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+/* Dodanie napisu "Spis treści" */
+body::before {
+  content: "Spis treści";
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background-color: transparent;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+#TOC ul ul strong {
+  font-weight: normal !important;
+}
+
+/* Styl dla tytułu spisu treści */
+#TOC h2 {
+  font-size: 1.2em;
+  font-weight: 300 !important; 
+  margin-top: 0;
+  margin-bottom: 20px; 
+  border-bottom: 2px solid #999;
+}
+
+/* Styl dla podtytułów spisu treści */
+#TOC h3 {
+  font-size: 0.9em;
+  font-weight: 300 !important;
+  margin-top: 10px;
+}
+
+/* Styl dla listy spisu treści */
+#TOC ul {
+  margin-top: 0;
+  font-weight: 300;
+  line-height: 1; 
+  list-style-type: none;
+}
+
+/* Styl dla elementów listy spisu treści */
+#TOC li {
+  margin-left:0;
+  font-weight: 300 !important;
+  margin-bottom: 4px; 
+  text-indent: 0; 
+  line-height: 1; 
+}
+
+/* Styl dla linków spisu treści */
+#TOC a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* Styl dla linków po najechaniu myszką */
+#TOC a:hover {
+  text-decoration: underline;
+}
+
+/* Styl dla wybranych linków w spisie treści */
+#TOC a.selected {
+  color: lightblue;
+}
+
+/* Styl dla głównych rozdziałów */
+#TOC > ul > li {
+  font-weight: 550 !important;
+}
+
+/* Styl dla podrozdziałów */
+#TOC ul ul {
+  font-size: 13px;
+  font-weight: 300 !important;
+  margin-left: 20px; 
+  text-align: right; 
+}
+
+#scrollToTopButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: gray;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#scrollToTopButton:hover {
+  background-color: lightgray;
+}
