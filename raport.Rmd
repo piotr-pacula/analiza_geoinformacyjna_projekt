@@ -803,7 +803,7 @@ combined_plot1 <- plot1 + plot2 + plot3 + plot4 + plot_layout(ncol = 2)
 combined_plot1
 ```
 
-TUTAJ TEKST
+<font size="4">Rycina przedstawia zróżnicowanie struktury rasowo-etnicznej ludności w latach 1990-2020. Dla każdego dziesięciolecia zostały wyróżnione typy struktury oznaczone dwiema literami. Pierwsza oznacza różnorodność (diversity), natomiast druga stopień segregacji (segregation).
 
 ### **3.2 Mapa zmian między rokiem 1990-2000, 2000-2010, 2010-2020, 1990-2020**
 
@@ -865,7 +865,7 @@ p2 <- ggplot(data = cls_df) +
 p1 + p2 + plot_annotation(title = "Zmiany między rokiem 1990-2000", theme = theme(plot.title = element_text(size = 20, hjust = 0.5)))
 ```
 
-TUTAJ TEKST
+<font size="4">W roku 1990 dominującym typem struktury obserwowanym w hrabstwie jest LL. Oznacza to w praktyce niewielkie zróżnicowanie rasowe na większości badanego obszaru, jak i również wysoką integrację pomiędzy populacją różnych ras. Największe zróżnicowanie rasowe zauważalne jest zwłaszcza w mieście Detroit oraz w jego pobliżu. W roku 2000 zróżnicowanie rasowe wzrosło, natomiast stopień segregacji rasowej zmalał.
 
 ```{r, results='hide'}
 list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
@@ -925,7 +925,7 @@ p2 <- ggplot(data = cls_df) +
 p1 + p2 + plot_annotation(title = "Zmiany między rokiem 2000-2010", theme = theme(plot.title = element_text(size = 20, hjust = 0.5)))
 ```
 
-TUTAJ TEKST
+<font size="4">W roku 2010 największą zmianę możemy zauważyć w zachodniej części obszaru, gdzie zróżnicowanie rasowe wyraźnie wzrosło, a około połowa hrabstwa jest oznaczona jako społeczeństwa o wysokim bądź średnim zróżnicowaniu rasowym. Wysokie zróżnicowanie rasowe występuje szczególnie w okolicach Detroit. Poziom segregacji rasowej przeważnie nie wykazuje wartości wyższych niż średnia, z wyjątkiem pojedynczego obszaru o średnim poziomie zróżnicowania rasowego oraz wysoką segregacją.
 
 ```{r, results='hide'}
 list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
@@ -986,7 +986,7 @@ p1 + p2 + plot_annotation(title = "Zmiany między rokiem 2010-2020", theme = the
 
 ```
 
-TUTAJ TEKST
+<font size="4">Rok 2020 wykazuje najwyższy, bo zajmujący większość obszaru hrabstwa, stopień zróżnicowania rasowego spośród wszystkich omawianych okresów. Jedyne obszary, które na przestrzeni lat wykazywały niewielkie zmiany (bądź nie wykazywały ich wcale) to centralna oraz wschodnia północ, gdzie zarówno zróżnicowanie rasowe, jak i segregacja są niskie, co oznacza, że dominująca jest tam tylko jedna rasa.
 
 ```{r, results='hide'}
 list_race <- c("whites", "blacks", "asians", "native_americans", "others", "latino")
@@ -1046,7 +1046,7 @@ p2 <- ggplot(data = cls_df) +
 p1 + p2 + plot_annotation(title = "Zmiany między rokiem 1990-2020", theme = theme(plot.title = element_text(size = 20, hjust = 0.5)))
 ```
 
-TUTAJ TEKST
+<font size="4">Zróżnicowanie rasowe oraz segregacja rasowa na przestrzeni omawianego trzydziestolecia zmieniły się głównie w zachodniej oraz centralnej części hrabstwa Wayne, a także w mieście Detroit oraz jego okolicach. Północna część w większości pozostawała bez zmian - przez cały badany okres przeważała tam głównie ludność czarna. W centrum i na zachodzie najwięcej występowało tam populacji białej, jednak z biegiem lat ich większość stawała się coraz mniejsza na coraz większej ilości obszarów spisowych. W roku 1990 znacząca większość obszarów była zdominowana (powyżej 80%) przez ludność białą, a w roku 2020 w niektórych okręgach ich przewaga spadła, została zastąpiona przewagą ludności czarnej, a nawet wystąpiły obszary spisowe, w których nie została określona dominacja żadnej rasy. W okolicach Detroit pojawił się duży obszar zdominowany przez Latynosów, a w 2020 na północy hrabstwa wystąpiły dwa obszary zdominowane przez Azjatów.
 
 
 
@@ -1070,7 +1070,7 @@ data_p %>%
 
 ```
 
-TUTAJ TEKST
+<font size="4">Macierz przejść obrazuje nam ilość obszarów spisowych zdominowanych przez daną rasę w podanym roku. Pierwszą zauważalną informacją jest, że w każdym badanym roku przeważa ludność biała, jednak jej przewaga z roku na rok maleje. Obszarów zdominowanych przez białych w powyżej 80% po 30 latach jest niemal trzykrotnie mniej (o 210 mniej), jednak mimo tego wciąż po 3 dekadach jest ich powyżej 50% w 151 obszarach spisowych. Dużo jest również obszarów zdominowanych przez ludność czarną, a liczby te rosną, a w szczególności rośnie ilość obszarów z przewagą osób czarnoskórych powyżej 80%. Istnieje bardzo niewiele obszarów zdominowanych przez Azjatów - w badanym okresie wyszczególniono tylko 2 obszary z przewagą ludności azjatyckiej, zauważone w 2020 roku. Obszarów spisowych, w których przeważa ludność Latynoska jest stosunkowo niewiele, jednak, podobnie jak w przypadku ludności czarnej, z roku na rok rośnie. W roku 2020 w okolicach Detroit pierwszy raz zauważono dominację Latynosów z przewagą powyżej 80% na aż pięciu obszarach. Rośnie również ilość obszarów, na których nie występuje dominacja żadnej rasy, co jest dowodem na rosnące zróżnicowanie rasowe społeczeństwa w hrabstwie Wayne.
 
 
 ### **3.4. Macierz przejść pokazująca zmiany w typach między rokiem 1990-2000, 2000-2010, 2010-2020, 1990-2020**
@@ -1225,7 +1225,7 @@ browsable(tagList(combined_tables))
 
 
 
-TUTAJ TEKST
+<font size="4">W pierwszej dekadzie badanego okresu nie wykazało zbyt dużo zmian. Dalej dominującą rasą w hrabstwie była ludność biała, przy jednoczesnej wysokiej ilości obszarów spisowych z większością czarnoskórą. Główną zauważalną zmianą jest przejście 30 obszarów o dominacji >50% ludności czarnej na >80%. Wiele obszarów również odczuło spadek odsetka ludności białej na rzecz Latynosów i Czarnych. W następnym dziesięcioleciu wartym uwagi jest przede wszystkim spadek dominacji ludności białej - obszarów o odsetku Białych powyżej 80% ubyło aż 60. Więcej natomiast obszarów ma znaczną przewagę w ilości ludności czarnej. W roku 2020 pojawiły się pierwsze obszary zdominowane przez pudność azjatycką, jednak wciąż takowych występują tylko 2. Wraz ze spadającym udziałem dominacji ludności białej rośnie odsetek latynosów w większości obszarów (głównie obszary Detroit), a także pojawia się znacznie więcej obszarów o braku dominacji którejkolwiek z ras.
 
 # **4. Wykorzystanie metod analizy krajobrazowej w analizie rasowo-etnicznej struktury ludności**
 
