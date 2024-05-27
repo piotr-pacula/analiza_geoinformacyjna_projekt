@@ -431,35 +431,36 @@ p4 <- ggplot(data = cls_df) +
 p1 + p2 + p3 + p4 + plot_annotation(title = "Typy zróżnicowania rasowego dla roku 1990, 2000, 2010, 2020", theme = theme(plot.title = element_text(size = 20, hjust = 0.5)))
 ```
 
-<font size="4">Tutaj opis do 3.1
+<font size="4">Mapy te uwidaczniają zmiany typów struktury rasowo-etnicznej.
+<br>
+<br>
+<font size="4">Strukturę rasowo-etniczną ludności klasyfikujemy odpowiednio:
+<br>
+<font size="4">1. Typ mało zróżnicowany (grupa dominująca powyżej 80%):
+<ol style="list-style-type: none;">
+  <li><font size="3">• zdominowany przez białych (WL)</li>
+  <li><font size="3">• zdominowany przez czarnych (BL)</li>
+  <li><font size="3">• zdominowany przez Azjatów (AL)</li>
+  <li><font size="3">• zdominowany przez Latynosów (HL)</li>
+</ol>
+<font size="4">2. Typ średnio zróżnicowany (grupa dominująca 50%-80%):
+<ol style="list-style-type: none;">
+  <li><font size="3">• zdominowany przez białych (WM)</li>
+  <li><font size="3">• zdominowany przez czarnych (BM)</li>
+  <li><font size="3">• zdominowany przez Azjatów (AM)</li>
+  <li><font size="3">• zdominowany przez Latynosów (HM)</li>
+</ol>
+<font size="4">3. Typ o dużym zróżnicowaniu - HD (żadna grupa nie przekracza 50%)
+<br>
+<br>
 
 ### **3.2 Mapa zmian między rokiem 1990-2000, 2000-2010, 2010-2020, 1990-2020**
-
-```{r}
-print("tutaj mapa zmian miedzy 1990-2000")
-```
-
-<font size="4">W roku 1990 dominującym typem struktury obserwowanym w hrabstwie jest LL. Oznacza to w praktyce niewielkie zróżnicowanie rasowe na większości badanego obszaru, jak i również wysoką integrację pomiędzy populacją różnych ras. Największe zróżnicowanie rasowe zauważalne jest zwłaszcza w mieście Detroit oraz w jego pobliżu. W roku 2000 zróżnicowanie rasowe wzrosło, natomiast stopień segregacji rasowej zmalał.
-
-```{r}
-print("tutaj mapa zmian miedzy 2000-2010")
-```
-
-<font size="4">W roku 2010 największą zmianę możemy zauważyć w zachodniej części obszaru, gdzie zróżnicowanie rasowe wyraźnie wzrosło, a około połowa hrabstwa jest oznaczona jako społeczeństwa o wysokim bądź średnim zróżnicowaniu rasowym. Wysokie zróżnicowanie rasowe występuje szczególnie w okolicach Detroit. Poziom segregacji rasowej przeważnie nie wykazuje wartości wyższych niż średnia, z wyjątkiem pojedynczego obszaru o średnim poziomie zróżnicowania rasowego oraz wysoką segregacją.
-
-```{r}
-print("tutaj mapa zmian miedzy 2010-2020")
-```
-
-<font size="4">Rok 2020 wykazuje najwyższy, bo zajmujący większość obszaru hrabstwa, stopień zróżnicowania rasowego spośród wszystkich omawianych okresów. Jedyne obszary, które na przestrzeni lat wykazywały niewielkie zmiany (bądź nie wykazywały ich wcale) to centralna oraz wschodnia północ, gdzie zarówno zróżnicowanie rasowe, jak i segregacja są niskie, co oznacza, że dominująca jest tam tylko jedna rasa.
 
 ```{r}
 knitr::include_graphics("result/raport/mapa_zmian.png")
 ```
 
-<font size="4">Zróżnicowanie rasowe oraz segregacja rasowa na przestrzeni omawianego trzydziestolecia zmieniły się głównie w zachodniej oraz centralnej części hrabstwa Wayne, a także w mieście Detroit oraz jego okolicach. Północna część w większości pozostawała bez zmian - przez cały badany okres przeważała tam głównie ludność czarna. W centrum i na zachodzie najwięcej występowało tam populacji białej, jednak z biegiem lat ich większość stawała się coraz mniejsza na coraz większej ilości obszarów spisowych. W roku 1990 znacząca większość obszarów była zdominowana (powyżej 80%) przez ludność białą, a w roku 2020 w niektórych okręgach ich przewaga spadła, została zastąpiona przewagą ludności czarnej, a nawet wystąpiły obszary spisowe, w których nie została określona dominacja żadnej rasy. W okolicach Detroit pojawił się duży obszar zdominowany przez Latynosów, a w 2020 na północy hrabstwa wystąpiły dwa obszary zdominowane przez Azjatów.
-
-
+<font size="4">Mapa przedstawia zmiany w zróżnicowaniu rasowym hrabstwa Wayne w latach 1990-2020. Zmiany te widoczne są głównie w zachodniej i centralnej części hrabstwa, a także w mieście Detroit i jego okolicach. Północna część hrabstwa pozostała w większości bez zmian, z dominacją ludności czarnej przez cały okres badawczy. W 1990 roku większość obszarów była zdominowana przez ludność białą (powyżej 80%), szczególnie w centrum i na zachodzie hrabstwa. Jednak z biegiem lat ich przewaga malała, ustępując miejsca ludności czarnej w wielu obszarach. Do 2020 roku pojawiły się także obszary, w których nie dominowała żadna rasa. W okolicach Detroit powstał duży obszar z dominacją Latynosów, a na północy hrabstwa w 2020 roku pojawiły się dwa obszary z dominacją Azjatów. Zmiany wystąpiły na większości obszarów spisowych. Ludność biała zachowała swoją dominację tylko w południowej i północnej części hrabstwa oraz w kilku obszarach z ludnością czarną w Detroit. Ogólnie zauważalny jest spadek udziału ludności białej - z dominacji >80% (WL) do dominacji 50%-80% (WM). Ludność czarna zwiększała swój udział na przedmieściach Detroit (głównie BM → BL). Na przedmieściach również pojawił się rosnący udział Latynosów, co zmniejszyło udział ludności białej i doprowadziło do większego zróżnicowania (HD → HM, WM → HM). Na zachodzie hrabstwa zauważalny jest spadek udziału ludności białej na rzecz większego zróżnicowania (WL → HD). Podsumowując, hrabstwo Wayne doświadczyło znaczących zmian w strukturze rasowej na przestrzeni trzydziestu lat, z widocznym zmniejszeniem udziału ludności białej i wzrostem udziału ludności czarnej oraz Latynosów, zwłaszcza na przedmieściach Detroit 
 
 ### **3.3. Ilość obszarów spisowych występujących w danym typie struktury rasowo-etnicznej w danym roku.**
 
